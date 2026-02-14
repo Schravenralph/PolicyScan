@@ -1,0 +1,133 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix doc: <http://data.example.org/def/doc#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Document Vocabulary (doc:)
+# Models documents, web pages, sections, and their provenance
+
+# ============================================================================
+# Classes
+# ============================================================================
+
+doc:WebPage
+    a owl:Class ;
+    rdfs:label "Webpagina"@nl, "Web Page"@en ;
+    rdfs:comment "A web page or HTML document."@en ;
+    rdfs:subClassOf dct:BibliographicResource ;
+    rdfs:subClassOf prov:Entity ;
+    dct:description "Represents web pages scraped from sources like rijksoverheid.nl, municipal sites, etc."@en .
+
+doc:DocumentSection
+    a owl:Class ;
+    rdfs:label "Document sectie"@nl, "Document Section"@en ;
+    rdfs:comment "A section or fragment within a document."@en ;
+    rdfs:subClassOf prov:Entity ;
+    dct:description "Represents sections extracted from documents (headings, paragraphs, etc.)."@en .
+
+doc:ScrapingRun
+    a owl:Class ;
+    rdfs:label "Scraping run"@nl, "Scraping Run"@en ;
+    rdfs:comment "A run or session of web scraping."@en ;
+    rdfs:subClassOf prov:Activity ;
+    dct:description "Represents scraping activities for provenance tracking."@en .
+
+doc:ExtractionRule
+    a owl:Class ;
+    rdfs:label "Extractieregel"@nl, "Extraction Rule"@en ;
+    rdfs:comment "A rule or pattern used to extract facts from text."@en ;
+    dct:description "Represents NLP extraction rules (spaCy patterns, regex, etc.) used to extract triples."@en .
+
+doc:ExtractedFact
+    a owl:Class ;
+    rdfs:label "Geëxtraheerd feit"@nl, "Extracted Fact"@en ;
+    rdfs:comment "A fact extracted from a document section."@en ;
+    rdfs:subClassOf prov:Entity ;
+    dct:description "Represents facts extracted from documents (subject-predicate-object triples)."@en .
+
+# ============================================================================
+# Properties
+# ============================================================================
+
+doc:hasSection
+    a owl:ObjectProperty ;
+    rdfs:label "heeft sectie"@nl, "has section"@en ;
+    rdfs:comment "Links a document to its sections."@en ;
+    rdfs:domain doc:WebPage ;
+    rdfs:range doc:DocumentSection .
+
+doc:extractedFrom
+    a owl:ObjectProperty ;
+    rdfs:label "geëxtraheerd uit"@nl, "extracted from"@en ;
+    rdfs:comment "Links an extracted fact to the section it was extracted from."@en ;
+    rdfs:domain doc:ExtractedFact ;
+    rdfs:range doc:DocumentSection ;
+    rdfs:subPropertyOf prov:wasDerivedFrom .
+
+doc:extractedBy
+    a owl:ObjectProperty ;
+    rdfs:label "geëxtraheerd door"@nl, "extracted by"@en ;
+    rdfs:comment "Links an extracted fact to the extraction rule that created it."@en ;
+    rdfs:domain doc:ExtractedFact ;
+    rdfs:range doc:ExtractionRule ;
+    rdfs:subPropertyOf prov:wasGeneratedBy .
+
+doc:scrapedIn
+    a owl:ObjectProperty ;
+    rdfs:label "gescraped in"@nl, "scraped in"@en ;
+    rdfs:comment "Links a web page to the scraping run that retrieved it."@en ;
+    rdfs:domain doc:WebPage ;
+    rdfs:range doc:ScrapingRun ;
+    rdfs:subPropertyOf prov:wasGeneratedBy .
+
+doc:sourceURL
+    a owl:DatatypeProperty ;
+    rdfs:label "bron URL"@nl, "source URL"@en ;
+    rdfs:comment "The URL of the web page or document."@en ;
+    rdfs:domain doc:WebPage ;
+    rdfs:range xsd:anyURI .
+
+doc:sectionPath
+    a owl:DatatypeProperty ;
+    rdfs:label "sectie pad"@nl, "section path"@en ;
+    rdfs:comment "The hierarchical path to the section (e.g., 'h1/h2/p')."@en ;
+    rdfs:domain doc:DocumentSection ;
+    rdfs:range xsd:string .
+
+doc:sectionText
+    a owl:DatatypeProperty ;
+    rdfs:label "sectie tekst"@nl, "section text"@en ;
+    rdfs:comment "The text content of the section."@en ;
+    rdfs:domain doc:DocumentSection ;
+    rdfs:range xsd:string .
+
+doc:extractionConfidence
+    a owl:DatatypeProperty ;
+    rdfs:label "extractie vertrouwen"@nl, "extraction confidence"@en ;
+    rdfs:comment "Confidence score for the extraction (0.0 to 1.0)."@en ;
+    rdfs:domain doc:ExtractedFact ;
+    rdfs:range xsd:float .
+
+doc:extractionRuleName
+    a owl:DatatypeProperty ;
+    rdfs:label "regel naam"@nl, "rule name"@en ;
+    rdfs:comment "Name or identifier of the extraction rule."@en ;
+    rdfs:domain doc:ExtractionRule ;
+    rdfs:range xsd:string .
+
+# ============================================================================
+# Provenance properties (using PROV-O)
+# ============================================================================
+
+# doc:extractedFrom is a subproperty of prov:wasDerivedFrom
+# doc:extractedBy is a subproperty of prov:wasGeneratedBy
+# doc:scrapedIn is a subproperty of prov:wasGeneratedBy
+
+# Additional provenance can use:
+# - prov:wasAttributedTo (who/what created the document)
+# - prov:atTime (when it was scraped/extracted)
+# - prov:used (what tools/processes were used)
+

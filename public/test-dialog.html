@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dialog Verification Test</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    .test-container {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
+    }
+    h1 {
+      margin-top: 0;
+      color: #333;
+    }
+    .info {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 4px;
+      padding: 16px;
+      margin: 20px 0;
+      color: #0c4a6e;
+    }
+    .screenshot-info {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: 4px;
+      padding: 16px;
+      margin: 20px 0;
+      color: #14532d;
+    }
+    code {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>Dialog Verification Test Page</h1>
+    <div class="info">
+      <p><strong>Purpose:</strong> This page is used to verify that dialogs have light, non-transparent backgrounds.</p>
+      <p><strong>Note:</strong> The actual dialog component is rendered by the React app. To see the dialog, you need to:</p>
+      <ol>
+        <li>Navigate to the main app</li>
+        <li>Trigger a draft reconciliation scenario</li>
+        <li>Or use the browser console to manually show the dialog</li>
+      </ol>
+    </div>
+    <div class="screenshot-info">
+      <p><strong>Screenshot Location:</strong></p>
+      <p><code>screenshots/dialog-verification.png</code></p>
+      <p>The screenshot has been taken. Check the file to verify the dialog appearance.</p>
+    </div>
+    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+      <p style="color: #6b7280; font-size: 0.9em;">
+        To manually trigger the dialog in the app, open the browser console and run:
+      </p>
+      <pre style="background: #f3f4f6; padding: 12px; border-radius: 4px; overflow-x: auto; font-size: 0.85em; margin-top: 10px;"><code>// Set up mock draft divergence
+localStorage.setItem('beleidsscan-draft', JSON.stringify({
+  step: 2,
+  queryId: '697f316c36f28245a24687c6',
+  onderwerp: 'huisvesting arbeidsmigranten',
+  timestamp: new Date().toISOString()
+}));
+
+// Reload the page to trigger reconciliation
+window.location.reload();</code></pre>
+    </div>
+  </div>
+</body>
+</html>
+

@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "lib": [
+      "ES2022"
+    ],
+    "moduleResolution": "NodeNext",
+    "outDir": "../../dist/server",
+    "rootDir": "../..",
+    "tsBuildInfoFile": "../../node_modules/.tmp/tsconfig.server.tsbuildinfo",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "types": []
+  },
+  "include": [
+    "**/*.ts",
+    "../shared/**/*.ts"
+  ],
+  "exclude": [
+    "**/node_modules",
+    "**/dist",
+    "**/build",
+    "**/.turbo",
+    "**/.next",
+    "**/coverage",
+    "**/.cache",
+    "**/tmp",
+    "**/test-results",
+    "**/playwright-report",
+    "**/allure-results",
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/scripts/**",
+    "../../tests/**",
+    "../shared/__tests__/**"
+  ]
+}

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Performance - Test Dashboard - Beleidsscan</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg-primary: #f5f5f5;
+      --bg-secondary: #ffffff;
+      --text-primary: #1a1a1a;
+      --text-secondary: #666;
+      --border-color: #e5e7eb;
+      --shadow: 0 2px 4px rgba(0,0,0,0.1);
+      --shadow-hover: 0 4px 8px rgba(0,0,0,0.15);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --info: #3b82f6;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #1a1a1a;
+      --bg-secondary: #2d2d2d;
+      --text-primary: #f5f5f5;
+      --text-secondary: #a0a0a0;
+      --border-color: #404040;
+      --shadow: 0 2px 4px rgba(0,0,0,0.3);
+      --shadow-hover: 0 4px 8px rgba(0,0,0,0.5);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      padding: 20px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .navbar {
+      background: var(--bg-secondary);
+      padding: 16px 24px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .navbar h2 {
+      margin: 0;
+      font-size: 20px;
+      color: var(--text-primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--text-primary);
+      background: var(--bg-primary);
+      transition: all 0.2s;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link:hover {
+      background: var(--info);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .nav-link.active {
+      background: var(--info);
+      color: white;
+    }
+
+    .btn {
+      background: var(--info);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    .btn-icon {
+      padding: 8px 12px;
+      font-size: 18px;
+    }
+
+    .chart-card {
+      background: var(--bg-secondary);
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .chart-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+
+    .chart-container {
+      position: relative;
+      height: 300px;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-secondary);
+    }
+
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border-left: 4px solid var(--error);
+    }
+
+    [data-theme="dark"] .error {
+      background: #7f1d1d;
+      color: #fee2e2;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+
+    .no-data-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <h2>🧪 Test Dashboard</h2>
+      <div class="nav-links">
+        <a href="/test-dashboard.html" class="nav-link">📊 Dashboard</a>
+        <a href="/test-health.html" class="nav-link">❤️ Health & Latency</a>
+        <a href="/test-performance.html" class="nav-link active">⚡ Performance</a>
+        <button class="btn btn-icon" onclick="toggleTheme()" title="Toggle dark mode">🌓</button>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div style="background: var(--bg-secondary); padding: 30px; border-radius: 8px; box-shadow: var(--shadow); margin-bottom: 20px;">
+      <h1 style="font-size: 32px; margin-bottom: 10px; color: var(--text-primary);">⚡ Performance</h1>
+      <p style="color: var(--text-secondary); font-size: 14px;">Test execution performance metrics, throughput, and trends</p>
+    </div>
+
+    <!-- Controls -->
+    <div style="margin-bottom: 20px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+      <label style="display: flex; align-items: center; gap: 8px;">
+        <span>Time Range:</span>
+        <select id="performanceTimeRange" style="padding: 6px 12px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-secondary); color: var(--text-primary);">
+          <option value="7">Last 7 days</option>
+          <option value="30" selected>Last 30 days</option>
+          <option value="90">Last 90 days</option>
+          <option value="365">Last year</option>
+        </select>
+      </label>
+      <button class="btn" onclick="loadPerformanceTrends()" style="padding: 6px 16px;">🔄 Refresh</button>
+    </div>
+
+    <!-- Performance Metrics Overview -->
+    <div class="charts-grid" style="margin-bottom: 20px;">
+      <div class="chart-card">
+        <div class="chart-title">⏱️ Performance Metrics</div>
+        <div id="performanceMetrics" style="padding: 16px;">
+          <div class="loading">Loading performance metrics...</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">📈 Performance Trends</div>
+        <div class="chart-container">
+          <canvas id="performanceTrendsChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slowest Tests -->
+    <div class="chart-card" style="margin-bottom: 20px;">
+      <div class="chart-title">🐌 Slowest Tests</div>
+      <div id="slowestTestsList" style="padding: 16px;">
+        <div class="loading">Loading slowest tests...</div>
+      </div>
+    </div>
+
+    <!-- Regression Alerts -->
+    <div class="chart-card" id="regressionAlertsCard" style="margin-bottom: 20px; display: none;">
+      <div class="chart-title">⚠️ Performance Regression Alerts</div>
+      <div id="regressionAlertsList" style="padding: 16px;"></div>
+    </div>
+
+    <!-- Legacy Charts -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Test Execution Timeline</div>
+        <div class="chart-container">
+          <canvas id="timelineChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Test Count Distribution</div>
+        <div class="chart-container" style="height: 200px;">
+          <canvas id="testCountChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme management
+    let currentTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+
+    function toggleTheme() {
+      currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      localStorage.setItem('theme', currentTheme);
+      // Re-render charts with new theme
+      if (performanceTrendsChart) {
+        performanceTrendsChart.destroy();
+        performanceTrendsChart = null;
+      }
+      if (lastPerformanceTrends) {
+        renderPerformanceTrends(lastPerformanceTrends);
+      }
+    }
+
+    // Escape HTML helper
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Format duration helper
+    function formatDuration(ms) {
+      if (ms < 1000) return `${Math.round(ms)}ms`;
+      if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
+      const minutes = Math.floor(ms / 60000);
+      const seconds = Math.floor((ms % 60000) / 1000);
+      return `${minutes}m ${seconds}s`;
+    }
+
+    let performanceTrendsChart = null;
+    let timelineChart = null;
+    let testCountChart = null;
+    let lastPerformanceTrends = null;
+
+    // Safe chart rendering
+    function safeRenderChart(canvasId, config, chartRef, fallbackMessage) {
+      try {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) {
+          console.error(`Canvas element not found: ${canvasId}`);
+          return null;
+        }
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          console.error(`Could not get 2D context for: ${canvasId}`);
+          return null;
+        }
+
+        if (chartRef) {
+          chartRef.destroy();
+        }
+
+        return new Chart(ctx, config);
+      } catch (error) {
+        console.error(`Error rendering chart ${canvasId}:`, error);
+        const canvas = document.getElementById(canvasId);
+        if (canvas && canvas.parentElement) {
+          canvas.parentElement.innerHTML = `<div class="no-data">${fallbackMessage || 'Chart rendering failed'}</div>`;
+        }
+        return null;
+      }
+    }
+
+    /**
+     * Load and render performance trends analytics
+     */
+    async function loadPerformanceTrends() {
+      const timeRangeDays = parseInt(document.getElementById('performanceTimeRange')?.value || '30');
+      
+      try {
+        const response = await fetch(`/api/tests/performance-trends?timeRangeDays=${timeRangeDays}`);
+        if (!response.ok) {
+          if (response.status === 404) {
+            document.getElementById('performanceMetrics').innerHTML = '<div class="no-data"><div class="no-data-icon">📊</div><div>No test data available</div></div>';
+            document.getElementById('slowestTestsList').innerHTML = '<div class="no-data"><div>No test data available</div></div>';
+            return;
+          }
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const trends = await response.json();
+        lastPerformanceTrends = trends;
+        renderPerformanceTrends(trends);
+      } catch (error) {
+        console.error('Error loading performance trends:', error);
+        document.getElementById('performanceMetrics').innerHTML = `<div class="error">Error loading performance trends: ${escapeHtml(error.message)}</div>`;
+        document.getElementById('slowestTestsList').innerHTML = `<div class="error">Error loading slowest tests: ${escapeHtml(error.message)}</div>`;
+      }
+    }
+
+    /**
+     * Render performance trends analytics
+     */
+    function renderPerformanceTrends(trends) {
+      // Render metrics
+      const metricsHtml = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">
+          <div style="text-align: center;">
+            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">Average</div>
+            <div style="font-size: 24px; font-weight: 600;">${formatDuration(trends.metrics.averageDuration)}</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">P50 (Median)</div>
+            <div style="font-size: 24px; font-weight: 600;">${formatDuration(trends.metrics.p50)}</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">P90</div>
+            <div style="font-size: 24px; font-weight: 600;">${formatDuration(trends.metrics.p90)}</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">P95</div>
+            <div style="font-size: 24px; font-weight: 600;">${formatDuration(trends.metrics.p95)}</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">P99</div>
+            <div style="font-size: 24px; font-weight: 600;">${formatDuration(trends.metrics.p99)}</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">Total Runs</div>
+            <div style="font-size: 24px; font-weight: 600;">${trends.metrics.totalRuns}</div>
+          </div>
+        </div>
+      `;
+      document.getElementById('performanceMetrics').innerHTML = metricsHtml;
+
+      // Render trends chart
+      if (trends.trends && trends.trends.length > 0) {
+        performanceTrendsChart = safeRenderChart(
+          'performanceTrendsChart',
+          {
+            type: 'line',
+            data: {
+              labels: trends.trends.map(t => new Date(t.date).toLocaleDateString()),
+              datasets: [
+                {
+                  label: 'Average Duration',
+                  data: trends.trends.map(t => t.averageDuration / 1000),
+                  borderColor: 'rgba(59, 130, 246, 1)',
+                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                  tension: 0.4,
+                },
+                {
+                  label: 'P50',
+                  data: trends.trends.map(t => t.p50 / 1000),
+                  borderColor: 'rgba(16, 185, 129, 1)',
+                  backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                  tension: 0.4,
+                  borderDash: [5, 5],
+                },
+                {
+                  label: 'P90',
+                  data: trends.trends.map(t => t.p90 / 1000),
+                  borderColor: 'rgba(245, 158, 11, 1)',
+                  backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                  tension: 0.4,
+                  borderDash: [2, 2],
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: true, position: 'top' },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return `${context.dataset.label}: ${formatDuration(context.parsed.y * 1000)}`;
+                    },
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: 'Duration (seconds)',
+                  },
+                },
+              },
+            },
+          },
+          performanceTrendsChart,
+          'No performance trends data available'
+        );
+      } else {
+        document.getElementById('performanceTrendsChart').parentElement.innerHTML = '<div class="no-data">No performance trends data available</div>';
+      }
+
+      // Render slowest tests
+      if (trends.slowestTests && trends.slowestTests.length > 0) {
+        const slowestHtml = trends.slowestTests.map((test, index) => `
+          <div style="padding: 12px; margin-bottom: 8px; background: var(--bg-primary); border-radius: 6px; border-left: 4px solid var(--warning);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-weight: 600; font-size: 14px;">${index + 1}. ${escapeHtml(test.testFile)}</div>
+                <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">
+                  Average: ${formatDuration(test.averageDuration)} | Runs: ${test.runCount}
+                </div>
+              </div>
+              <div style="font-size: 18px; font-weight: 600; color: var(--warning);">
+                ${formatDuration(test.averageDuration)}
+              </div>
+            </div>
+          </div>
+        `).join('');
+        document.getElementById('slowestTestsList').innerHTML = slowestHtml;
+      } else {
+        document.getElementById('slowestTestsList').innerHTML = '<div class="no-data">No slow test data available</div>';
+      }
+
+      // Render regression alerts
+      if (trends.regressions && trends.regressions.length > 0) {
+        const regressionsHtml = trends.regressions.map(regression => `
+          <div style="padding: 12px; margin-bottom: 8px; background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--error); border-radius: 6px;">
+            <div style="font-weight: 600; color: var(--error); margin-bottom: 4px;">${escapeHtml(regression.testFile)}</div>
+            <div style="font-size: 12px; color: var(--text-secondary);">
+              Duration increased by ${((regression.percentIncrease || 0) * 100).toFixed(1)}% 
+              (${formatDuration(regression.previousDuration)} → ${formatDuration(regression.currentDuration)})
+            </div>
+          </div>
+        `).join('');
+        document.getElementById('regressionAlertsList').innerHTML = regressionsHtml;
+        document.getElementById('regressionAlertsCard').style.display = 'block';
+      } else {
+        document.getElementById('regressionAlertsCard').style.display = 'none';
+      }
+    }
+
+    // Load on page load
+    loadPerformanceTrends();
+  </script>
+</body>
+</html>
+
+
+
+
+

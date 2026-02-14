@@ -1,0 +1,499 @@
+# Docker Compose configuration for Beleidsscan
+# Port assignments:
+#   4001  - Backend API (mapped from container port 4000)
+#   5173  - Frontend (Vite)
+#   6380  - Redis (mapped from container port 6379)
+#   7200  - GraphDB
+#   7474  - Neo4j HTTP
+#   7687  - Neo4j Bolt
+#   27017 - MongoDB
+#   11434 - Ollama (optional, LLM reranking)
+#   5432  - PostgreSQL
+#
+# Resource Limits:
+#   All services have CPU and memory limits to prevent 100% resource usage.
+#   Total limits are capped at ~80% of system resources to prevent system crashes.
+#   Adjust limits based on your system specs (check with: nproc, free -h)
+
+services:
+  # Backend API service
+  backend:
+    build:
+      context: .
+      target: development
+    container_name: beleidsscan-backend
+    ports:
+      - "${PORT:-4000}:4000" # Backend API - host port from env (default 4000), container port 4000
+    volumes:
+      # Mount source code for hot reload
+      - ./src:/app/src:ro
+      - ./config:/app/config:ro
+      - ./scripts:/app/scripts:ro
+      - ./docs:/app/docs:ro
+      - ./urban-planning-topics.json:/app/urban-planning-topics.json:ro
+      - ./gemeentes-en-cbs.csv:/app/gemeentes-en-cbs.csv:ro
+      # Persist data
+      - ./data:/app/data
+      - ./test-results:/app/test-results
+      - ./coverage:/app/coverage
+      # Note: node_modules is built in Dockerfile, not using named volume to preserve build dependencies
+    environment:
+      - NODE_ENV=development
+      - PORT=${PORT:-4000}
+      - NEO4J_URI=${NEO4J_URI:-bolt://neo4j:7687}
+      - MONGODB_URI=${MONGODB_URI:-mongodb://admin:password@mongodb:27017/beleidsscan?authSource=admin}
+      - DB_NAME=${DB_NAME:-beleidsscan}
+      - GRAPHDB_HOST=${GRAPHDB_HOST:-graphdb}
+      - GRAPHDB_PORT=${GRAPHDB_PORT:-7200}
+      - REDIS_HOST=${REDIS_HOST:-redis}
+      - REDIS_PORT=${REDIS_PORT:-6379}
+      - KG_BACKEND=${KG_BACKEND:-graphdb}  # Knowledge graph backend: graphdb|neo4j (default: graphdb)
+                                           # Set to 'neo4j' to enable hierarchical structure features
+      - OLLAMA_API_URL=${OLLAMA_API_URL:-http://ollama:11434}  # Ollama service URL (when Ollama service is running)
+    depends_on:
+      neo4j:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          # Backend needs more resources for API processing
+          # CRITICAL: Increased from 1G to 4G based on actual memory analysis
+          # Analysis shows: Base (500MB) + Peak Ops (2GB) + Safety (1GB) + Overhead (500MB) = 4GB
+          # See DOCKER_MEMORY_ANALYSIS.md for detailed breakdown
+          # Node.js --max-old-space-size=8192 allows up to 8GB heap, but actual peak usage is ~3.5GB
+          cpus: '2.0'      # Increased from 1.0 (was at 78% CPU usage)
+          memory: 4G       # Optimal: 4GB allows for growth without waste (was 1G, causing 99.97% usage)
+        reservations:
+          cpus: '0.5'
+          memory: 1G       # Increased from 512M to ensure container can start
+    healthcheck:
+      test: [ "CMD", "node", "-e", "require('http').get('http://127.0.0.1:4000/health', (r) => {let d='';r.on('data',c=>d+=c);r.on('end',()=>process.exit(r.statusCode === 200 ? 0 : 1));}).on('error',()=>process.exit(1));setTimeout(()=>process.exit(1),5000)" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - beleidsscan-network
+    command: pnpm run dev:backend
+
+  # Frontend Vite service
+  frontend:
+    build:
+      context: .
+      target: development
+    container_name: beleidsscan-frontend
+    ports:
+      - "${VITE_PORT:-5173}:5173" # Vite frontend - host port from env (default 5173), container port 5173
+    volumes:
+      # Mount source code for hot reload
+      - ./src:/app/src:ro
+      - ./config:/app/config
+      - ./public:/app/public:ro
+      - ./stats-dashboard.html:/app/stats-dashboard.html:ro
+      - ./urban-planning-topics.json:/app/urban-planning-topics.json:ro
+      - ./gemeentes-en-cbs.csv:/app/gemeentes-en-cbs.csv:ro
+      # Note: node_modules is built in Dockerfile, not using named volume to preserve build dependencies
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=/api
+      - DOCKER_CONTAINER=true
+      - VITE_HTTPS=false
+      - VITE_API_PROXY_TARGET=http://backend:${PORT:-4000}
+      - BACKEND_HEALTH_URL=http://backend:${PORT:-4000}/health
+      - NEO4J_URI=${NEO4J_URI:-bolt://neo4j:7687}
+      - MONGODB_URI=${MONGODB_URI:-mongodb://admin:password@mongodb:27017/beleidsscan?authSource=admin}
+      - DB_NAME=${DB_NAME:-beleidsscan}
+      - GRAPHDB_HOST=${GRAPHDB_HOST:-graphdb}
+      - GRAPHDB_PORT=${GRAPHDB_PORT:-7200}
+      - REDIS_HOST=${REDIS_HOST:-redis}
+      - REDIS_PORT=${REDIS_PORT:-6379}
+    depends_on:
+      backend:
+        condition: service_started
+    env_file:
+      - .env
+    restart: unless-stopped
+    # CRITICAL: Increase file descriptor limit to prevent esbuild EPIPE errors
+    # esbuild opens many file descriptors for transformations, dependencies, and cache
+    # Default Docker limit (1024) is too low and causes crashes with "The service is no longer running: write EPIPE"
+    # Minimum: 4096, Recommended: 8192
+    # DO NOT REMOVE - This is required for esbuild to function properly
+    # See docs/21-issues/ESBUILD-EPIPE-ROOT-CAUSE.md for details
+    # Validate with: pnpm run validate:docker
+    ulimits:
+      nofile:
+        soft: 8192  # Recommended minimum for esbuild (was 1024, causing EPIPE crashes)
+        hard: 8192
+    deploy:
+      resources:
+        limits:
+          # Frontend needs more memory for Vite + esbuild service
+          # esbuild service can crash with EPIPE errors if memory is too low
+          # CRITICAL FIX: Increased from 1G to 2G to prevent OOM kills
+          # esbuild was killed on Jan 9 with 1.7GB virtual memory during build
+          # Vite dev server + esbuild service + HMR + file watching + build spikes needs ~1.5-2GB
+          # See SERVER_CRASH_ROOT_CAUSE_ANALYSIS.md for OOM kill details
+          cpus: '0.5'
+          memory: 2G  # Increased from 1G to prevent system-level OOM kills
+        reservations:
+          cpus: '0.25'
+          memory: 1G  # Increased from 512M to ensure container can start with headroom
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:5173', (r) => {let d='';r.on('data',c=>d+=c);r.on('end',()=>process.exit(r.statusCode === 200 ? 0 : 1));}).on('error',()=>process.exit(1));setTimeout(()=>process.exit(1),5000)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - beleidsscan-network
+    command: pnpm run dev
+
+  # Test runner service with resource limits
+  test:
+    build:
+      context: .
+      target: development
+    container_name: beleidsscan-test
+    volumes:
+      - ./src:/app/src:ro
+      - ./urban-planning-topics.json:/app/urban-planning-topics.json:ro
+      - ./gemeentes-en-cbs.csv:/app/gemeentes-en-cbs.csv:ro
+      - ./tests:/app/tests:ro
+      - ./config:/app/config:ro
+      - ./coverage:/app/coverage
+      - ./test-results:/app/test-results
+      - /app/node_modules
+    environment:
+      - NODE_ENV=test
+      - CI=true
+    env_file:
+      - .env
+    command: pnpm test
+    deploy:
+      resources:
+        limits:
+          # Capped at ~80% to prevent system crashes
+          cpus: '1.5'  # Reduced from 2.0
+          memory: 1.5G  # Reduced from 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    # Don't auto-start, run manually with: docker compose run --rm test
+    profiles:
+      - testing
+    networks:
+      - beleidsscan-network
+
+  # Puppeteer scraper service with higher resource limits
+  scraper:
+    build:
+      context: .
+      target: development
+    container_name: beleidsscan-scraper
+    volumes:
+      - ./src:/app/src:ro
+      - ./scripts:/app/scripts:ro
+      - ./data:/app/data
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+    env_file:
+      - .env
+    # Scraper needs more resources for browser instances, but capped at 80%
+    deploy:
+      resources:
+        limits:
+          # Reduced from 4.0 CPU / 4G to prevent 100% resource usage
+          cpus: '2.5'  # Allows intensive scraping while leaving CPU headroom
+          memory: 3G  # Reduced from 4G to prevent OOM crashes
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    # Don't auto-start, run manually with: docker compose run --rm scraper pnpm run explore:iplo
+    profiles:
+      - scraping
+    networks:
+      - beleidsscan-network
+    # Share memory for Chromium
+    shm_size: 2gb
+
+  # GraphDB service for RDF/SPARQL knowledge graph
+  graphdb:
+    image: ontotext/graphdb:11.2.0
+    container_name: beleidsscan-graphdb
+    ports:
+      - "${GRAPHDB_PORT:-7200}:7200"      # GraphDB - host port from env (default 7200), container port 7200
+    environment:
+      GDB_HEAP_SIZE: 2G
+      GDB_MIN_HEAP_SIZE: 1G
+      # License file path (optional - only set if license file exists)
+      # GraphDB Free edition doesn't require a license
+      # If you have a license file, set GRAPHDB_LICENSE_PATH in .env or copy to ./config/graphdb.license
+      # GDB_LICENSE_FILE: /opt/graphdb/home/conf/graphdb.license
+      # LLM API key for "Talk to Your Graph" feature
+      # Uses OPENAI_API_KEY from .env file
+      GDB_JAVA_OPTS: >-
+        -Dgraphdb.llm.api-key=${OPENAI_API_KEY}
+        -Dgraphdb.llm.api=openai-assistants
+        -Dgraphdb.llm.model=gpt-4o-mini
+    env_file:
+      - .env
+    volumes:
+      - graphdb_data:/opt/graphdb/home
+      # Mount license file only if it exists (optional - GraphDB Free doesn't need it)
+      # To use a license: set GRAPHDB_LICENSE_PATH in .env or copy to ./config/graphdb.license
+      # Uncomment the line below if you have a license file:
+      # - ${GRAPHDB_LICENSE_PATH:-./config/graphdb.license}:/opt/graphdb/home/conf/graphdb.license:ro
+    networks:
+      - beleidsscan-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          # GraphDB can be memory-intensive, but capped to prevent crashes
+          cpus: '1.5'  # Limits CPU usage to ~80% of typical system
+          memory: 2G  # Matches GDB_HEAP_SIZE, prevents OOM
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7200/rest/repositories"] # Container internal port always 7200
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s  # GraphDB can be slow to start, especially on first run
+
+  # Neo4j graph database service
+  neo4j:
+    image: neo4j:5.15-community
+    container_name: beleidsscan-neo4j
+    ports:
+      - "${NEO4J_HTTP_PORT:-7474}:7474"      # Neo4j HTTP - host port from env (default 7474), container port 7474
+      - "${NEO4J_BOLT_PORT:-7687}:7687"      # Neo4j Bolt - host port from env (default 7687), container port 7687
+    environment:
+      - NEO4J_AUTH=${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-password}
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_dbms_memory_heap_initial__size=512m
+      - NEO4J_dbms_memory_heap_max__size=2G
+      - NEO4J_dbms_memory_pagecache_size=1G
+      - NEO4J_server_default__listen__address=0.0.0.0
+      - NEO4J_server_bolt_listen__address=0.0.0.0:7687
+      - NEO4J_server_http_listen__address=0.0.0.0:7474
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+      - neo4j_import:/var/lib/neo4j/import
+      - neo4j_plugins:/plugins
+    networks:
+      - beleidsscan-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          # Neo4j memory settings (2G heap + 1G pagecache) need container limits
+          cpus: '1.5'  # Prevents 100% CPU usage
+          memory: 3G  # Allows heap + pagecache + overhead, capped to prevent OOM
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+    healthcheck:
+      test: ["CMD", "cypher-shell", "-u", "neo4j", "-p", "${NEO4J_PASSWORD:-password}", "RETURN 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s  # Neo4j can be slow to start, especially on first run with data initialization
+
+  # MongoDB document database service
+  mongodb:
+    image: mongo:7.0
+    container_name: beleidsscan-mongodb
+    ports:
+      - "${MONGODB_PORT:-27017}:27017"    # MongoDB - host port from env (default 27017), container port 27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER:-admin}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD:-password}
+      - MONGO_INITDB_DATABASE=${DB_NAME:-beleidsscan}
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    networks:
+      - beleidsscan-network
+    restart: unless-stopped
+    # Optimize for large datasets (Common Crawl .nl domain)
+    command: >
+      mongod
+      --wiredTigerCacheSizeGB 2
+      --wiredTigerCollectionBlockCompressor snappy
+      --wiredTigerIndexPrefixCompression true
+    deploy:
+      resources:
+        limits:
+          # MongoDB cache (2G) + overhead, capped to prevent system crashes
+          cpus: '1.0'  # Limits CPU usage
+          memory: 2.5G  # Allows cache + overhead, prevents OOM
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s  # MongoDB typically starts faster, but give extra time for initialization
+    # Removed profiles restriction - MongoDB starts by default for Common Crawl
+
+  # Redis service for background job queue (Bull)
+  redis:
+    image: redis:7-alpine
+    container_name: beleidsscan-redis
+    ports:
+      - "${REDIS_PORT:-6380}:6379"      # Redis host port from env (default 6380), container port 6379
+    # Force Redis to run as master (not replica) to allow writes
+    # Remove any replica configuration that might be persisted in redis_data volume
+    # SECURITY: Password authentication is always required - REDIS_PASSWORD must be set in .env
+    command: >
+      redis-server
+      --requirepass ${REDIS_PASSWORD}
+      --appendonly yes
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+      --replicaof no one
+      --slave-read-only no
+    volumes:
+      - redis_data:/data
+    networks:
+      - beleidsscan-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          # Redis is lightweight, minimal limits
+          cpus: '0.5'  # Prevents CPU spikes
+          memory: 512M  # Matches maxmemory setting
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+    healthcheck:
+      # Always use password authentication (REDIS_PASSWORD is required)
+      test: ["CMD", "sh", "-c", "redis-cli -a \"${REDIS_PASSWORD}\" ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # Ollama service for local LLM reranking (optional)
+  # Only starts if explicitly enabled or when using --profile llm
+  # Models need to be pulled after first start: docker exec beleidsscan-ollama ollama pull llama2
+  ollama:
+    image: ollama/ollama:latest
+    container_name: beleidsscan-ollama
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"  # Ollama API - host port from env (default 11434), container port 11434
+    volumes:
+      - ollama_data:/root/.ollama  # Persist models across container restarts
+    networks:
+      - beleidsscan-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          # Ollama needs significant memory for models (4GB+ recommended)
+          cpus: '2.0'  # Allows model inference without CPU starvation
+          memory: 4G  # Sufficient for most models (llama2, mistral, etc.)
+        reservations:
+          cpus: '0.5'
+          memory: 1G  # Minimum memory to start
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s  # Ollama can be slow to start, especially on first run
+    # Make service optional - only start with --profile llm or if explicitly enabled
+    # To start: docker compose --profile llm up -d ollama
+    # Or set ENABLE_OLLAMA=true in .env
+    profiles:
+      - llm
+
+  # PostgreSQL relational database service (optional, for future use)
+  postgres:
+    image: postgres:16-alpine
+    container_name: beleidsscan-postgres
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"      # PostgreSQL - host port from env (default 5432), container port 5432
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+      - POSTGRES_DB=${POSTGRES_DB:-beleidsscan}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - beleidsscan-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          # PostgreSQL is optional, minimal limits
+          cpus: '0.5'  # Light usage, prevents CPU spikes
+          memory: 512M  # Minimal memory footprint
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    profiles:
+      - databases  # Only start with --profile databases
+
+  # Prometheus Pushgateway for CI test metrics
+  pushgateway:
+    image: prom/pushgateway:v1.7.0
+    container_name: beleidsscan-pushgateway
+    ports:
+      - "${PUSHGATEWAY_PORT:-9091}:9091"  # Pushgateway - host port from env (default 9091), container port 9091
+    networks:
+      - beleidsscan-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9091/metrics"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  beleidsscan-network:
+    driver: bridge
+
+volumes:
+  node_modules:
+  graphdb_data:
+  neo4j_data:
+  neo4j_logs:
+  neo4j_import:
+  neo4j_plugins:
+  mongodb_data:
+  mongodb_config:
+  redis_data:
+  ollama_data:  # Persist Ollama models across container restarts
+  postgres_data:

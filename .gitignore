@@ -1,0 +1,31 @@
+# Dependencies
+node_modules
+dist
+dist-ssr
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs
+logs
+*.log
+
+# Build outputs
+build
+.cache
+.vite
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+
+# Test results (shouldn't exist but just in case)
+test-results
+coverage
+*.lcov

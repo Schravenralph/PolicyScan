@@ -1,0 +1,127 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix aid: <http://data.example.org/def/aid#> .
+@prefix law: <http://data.example.org/def/law#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Legal Aid Vocabulary (aid:)
+# Models legal aid providers, eligibility rules, and procedures
+
+# ============================================================================
+# Classes
+# ============================================================================
+
+aid:LegalAidProvider
+    a owl:Class ;
+    rdfs:label "Rechtshulpverlener"@nl, "Legal Aid Provider"@en ;
+    rdfs:comment "An organization or individual that provides legal aid services."@en ;
+    rdfs:subClassOf <http://xmlns.com/foaf/0.1/Organization> ;
+    dct:description "Represents legal aid providers such as Juridisch Loket, legal aid lawyers, pro bono organizations, etc."@en .
+
+aid:LegalAidEligibilityRule
+    a owl:Class ;
+    rdfs:label "Toekenningsregel"@nl, "Eligibility Rule"@en ;
+    rdfs:comment "A rule that determines eligibility for legal aid."@en ;
+    dct:description "Represents eligibility criteria for legal aid, including income thresholds, matter types, etc."@en .
+
+aid:IssueType
+    a owl:Class ;
+    rdfs:label "Probleemtype"@nl, "Issue Type"@en ;
+    rdfs:comment "A type of legal issue or matter (e.g., 'Huur', 'Scheiding', 'Werk')."@en ;
+    dct:description "Represents types of legal issues that legal aid can address."@en .
+
+aid:LegalAidApplication
+    a owl:Class ;
+    rdfs:label "Rechtshulpaanvraag"@nl, "Legal Aid Application"@en ;
+    rdfs:comment "An application for legal aid."@en ;
+    dct:description "Represents applications for legal aid services."@en .
+
+aid:ServiceType
+    a owl:Class ;
+    rdfs:label "Diensttype"@nl, "Service Type"@en ;
+    rdfs:comment "A type of legal aid service (e.g., 'Advies', 'Bemiddeling', 'Procesvertegenwoordiging')."@en ;
+    dct:description "Represents types of services offered by legal aid providers."@en .
+
+# ============================================================================
+# Properties
+# ============================================================================
+
+aid:providesService
+    a owl:ObjectProperty ;
+    rdfs:label "biedt dienst"@nl, "provides service"@en ;
+    rdfs:comment "Links a legal aid provider to services it offers."@en ;
+    rdfs:domain aid:LegalAidProvider ;
+    rdfs:range aid:ServiceType .
+
+aid:handlesIssueType
+    a owl:ObjectProperty ;
+    rdfs:label "behandelt probleemtype"@nl, "handles issue type"@en ;
+    rdfs:comment "Indicates that a provider handles a specific issue type."@en ;
+    rdfs:domain aid:LegalAidProvider ;
+    rdfs:range aid:IssueType .
+
+aid:hasEligibilityRule
+    a owl:ObjectProperty ;
+    rdfs:label "heeft toekenningsregel"@nl, "has eligibility rule"@en ;
+    rdfs:comment "Links a provider or service to its eligibility rules."@en ;
+    rdfs:domain aid:LegalAidProvider ;
+    rdfs:range aid:LegalAidEligibilityRule .
+
+aid:appliesToIssueType
+    a owl:ObjectProperty ;
+    rdfs:label "is van toepassing op probleemtype"@nl, "applies to issue type"@en ;
+    rdfs:comment "Indicates that an eligibility rule applies to a specific issue type."@en ;
+    rdfs:domain aid:LegalAidEligibilityRule ;
+    rdfs:range aid:IssueType .
+
+aid:maxIncomeThreshold
+    a owl:DatatypeProperty ;
+    rdfs:label "maximaal inkomen"@nl, "maximum income"@en ;
+    rdfs:comment "Maximum income threshold for eligibility (in euros per year)."@en ;
+    rdfs:domain aid:LegalAidEligibilityRule ;
+    rdfs:range xsd:decimal .
+
+aid:minIncomeThreshold
+    a owl:DatatypeProperty ;
+    rdfs:label "minimaal inkomen"@nl, "minimum income"@en ;
+    rdfs:comment "Minimum income threshold for eligibility (in euros per year)."@en ;
+    rdfs:domain aid:LegalAidEligibilityRule ;
+    rdfs:range xsd:decimal .
+
+aid:relatedToProcedure
+    a owl:ObjectProperty ;
+    rdfs:label "gerelateerd aan procedure"@nl, "related to procedure"@en ;
+    rdfs:comment "Links legal aid services to legal procedures they can help with."@en ;
+    rdfs:domain aid:ServiceType ;
+    rdfs:range law:Procedure .
+
+aid:providerName
+    a owl:DatatypeProperty ;
+    rdfs:label "naam"@nl, "name"@en ;
+    rdfs:comment "Name of the legal aid provider."@en ;
+    rdfs:domain aid:LegalAidProvider ;
+    rdfs:range xsd:string .
+
+aid:contactInfo
+    a owl:DatatypeProperty ;
+    rdfs:label "contactgegevens"@nl, "contact information"@en ;
+    rdfs:comment "Contact information for the provider (phone, email, address)."@en ;
+    rdfs:domain aid:LegalAidProvider ;
+    rdfs:range xsd:string .
+
+aid:serviceArea
+    a owl:DatatypeProperty ;
+    rdfs:label "werkgebied"@nl, "service area"@en ;
+    rdfs:comment "Geographic area served by the provider (municipality, region, etc.)."@en ;
+    rdfs:domain aid:LegalAidProvider ;
+    rdfs:range xsd:string .
+
+# ============================================================================
+# Links to other vocabularies
+# ============================================================================
+
+# Legal aid can help with procedures defined in law: vocabulary
+# Issue types can be linked to legal subjects (law:LegalSubject)
+

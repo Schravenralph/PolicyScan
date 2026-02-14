@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "etl-manifest@v1",
+  "title": "ETL Manifest",
+  "description": "Schema for ETL manifests with provenance information",
+  "type": "object",
+  "required": ["schemaVersion", "runId", "createdAt", "completedAt", "provenance", "outputs", "stats"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Schema version identifier"
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Run ID"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Creation timestamp (ISO 8601)"
+    },
+    "completedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Completion timestamp (ISO 8601)"
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["inputFingerprints", "parserVersions", "mapperVersions", "modelVersions", "rdfMappingVersion"],
+      "properties": {
+        "inputFingerprints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["documentId", "contentFingerprint"],
+            "properties": {
+              "documentId": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Document ID"
+              },
+              "contentFingerprint": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$",
+                "description": "Content fingerprint (sha256)"
+              }
+            }
+          },
+          "description": "Input document fingerprints"
+        },
+        "parserVersions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Parser versions (e.g., { 'spacy': '3.7.0' })"
+        },
+        "mapperVersions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Mapper versions (e.g., { 'rdf-mapper': '1.0.0' })"
+        },
+        "modelVersions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Model versions (e.g., { 'spacy-nl': '3.7.0' })"
+        },
+        "rdfMappingVersion": {
+          "type": "string",
+          "minLength": 1,
+          "description": "RDF mapping version"
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "required": ["turtleFiles", "manifest"],
+      "properties": {
+        "turtleFiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Turtle file paths"
+        },
+        "manifest": {
+          "type": "string",
+          "description": "Manifest file path"
+        }
+      }
+    },
+    "stats": {
+      "type": "object",
+      "required": ["documentsProcessed", "triplesEmitted", "filesWritten"],
+      "properties": {
+        "documentsProcessed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "triplesEmitted": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "filesWritten": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}
+

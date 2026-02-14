@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "etl-job-result@v1",
+  "title": "ETL Job Result",
+  "description": "Schema for ETL job results from Python ETL workers",
+  "type": "object",
+  "required": ["schemaVersion", "runId", "status", "stats", "outputs"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": ["etl-result@v1"],
+      "description": "Schema version identifier"
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Run ID (must match request)"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["succeeded", "failed", "partial"],
+      "description": "Job status"
+    },
+    "stats": {
+      "type": "object",
+      "required": ["documentsProcessed", "triplesEmitted", "filesWritten"],
+      "properties": {
+        "documentsProcessed": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of documents processed"
+        },
+        "triplesEmitted": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of triples emitted"
+        },
+        "filesWritten": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of files written"
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "required": ["turtleFiles", "manifest"],
+      "properties": {
+        "turtleFiles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Turtle file path or ArtifactRef.sha256"
+          },
+          "description": "Turtle file paths or ArtifactRefs"
+        },
+        "manifest": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Manifest file path or ArtifactRef.sha256"
+        }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Error code"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Error message"
+          },
+          "documentId": {
+            "type": "string",
+            "description": "Document ID (if error is document-specific)"
+          },
+          "context": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Additional error context"
+          }
+        }
+      },
+      "description": "Errors (if any)"
+    }
+  }
+}
+

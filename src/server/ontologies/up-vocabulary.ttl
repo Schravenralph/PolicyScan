@@ -1,0 +1,142 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix up: <http://data.example.org/def/up#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Urban Planning Vocabulary (up:)
+# Aligned with Omgevingswet, IMRO, NEN3610, DSO Stelselcatalogus
+
+# ============================================================================
+# Classes
+# ============================================================================
+
+up:SpatialPlan
+    a owl:Class ;
+    rdfs:label "Ruimtelijk Plan"@nl, "Spatial Plan"@en ;
+    rdfs:comment "A spatial plan (omgevingsplan, bestemmingsplan, etc.) that defines spatial regulations and zoning."@en ;
+    rdfs:subClassOf geo:Feature ;
+    dct:description "Represents spatial plans under the Omgevingswet, including omgevingsplannen, bestemmingsplannen, and other spatial planning instruments."@en .
+
+up:ZoningArea
+    a owl:Class ;
+    rdfs:label "Bestemmingsgebied"@nl, "Zoning Area"@en ;
+    rdfs:comment "A geographic area with specific zoning regulations (bestemming)."@en ;
+    rdfs:subClassOf geo:Feature ;
+    dct:description "Represents zoning areas (bestemmingsgebieden) within spatial plans."@en .
+
+up:PlanningRegulation
+    a owl:Class ;
+    rdfs:label "Planregel"@nl, "Planning Regulation"@en ;
+    rdfs:comment "A regulation or rule defined in a spatial plan."@en ;
+    dct:description "Represents individual regulations within spatial plans, such as building height limits, permitted uses, etc."@en .
+
+up:ActivityType
+    a owl:Class ;
+    rdfs:label "Activiteit"@nl, "Activity Type"@en ;
+    rdfs:comment "A type of activity (e.g., 'Wonen', 'Kantoor', 'Winkel') as defined in DSO Stelselcatalogus."@en ;
+    dct:description "Represents activity types from the DSO Stelselcatalogus (Omgevingswet activities)."@en .
+
+up:LandUse
+    a owl:Class ;
+    rdfs:label "Gebruik"@nl, "Land Use"@en ;
+    rdfs:comment "The designated land use for a spatial unit."@en ;
+    dct:description "Represents land use designations (bestemmingen) in spatial plans."@en .
+
+up:Building
+    a owl:Class ;
+    rdfs:label "Gebouw"@nl, "Building"@en ;
+    rdfs:comment "A building structure."@en ;
+    rdfs:subClassOf geo:Feature ;
+    dct:description "Represents buildings, aligned with BAG/IMGeo concepts."@en .
+
+up:Parcel
+    a owl:Class ;
+    rdfs:label "Kavel"@nl, "Parcel"@en ;
+    rdfs:comment "A land parcel (kavel/perceel)."@en ;
+    rdfs:subClassOf geo:Feature ;
+    dct:description "Represents land parcels, aligned with Kadaster/BAG concepts."@en .
+
+# ============================================================================
+# Properties
+# ============================================================================
+
+up:hasZoningArea
+    a owl:ObjectProperty ;
+    rdfs:label "heeft bestemmingsgebied"@nl, "has zoning area"@en ;
+    rdfs:comment "Links a spatial plan to its zoning areas."@en ;
+    rdfs:domain up:SpatialPlan ;
+    rdfs:range up:ZoningArea .
+
+up:definesRegulation
+    a owl:ObjectProperty ;
+    rdfs:label "definieert regel"@nl, "defines regulation"@en ;
+    rdfs:comment "Links a spatial plan or zoning area to its regulations."@en ;
+    rdfs:domain up:SpatialPlan ;
+    rdfs:range up:PlanningRegulation .
+
+up:allowsActivity
+    a owl:ObjectProperty ;
+    rdfs:label "staat activiteit toe"@nl, "allows activity"@en ;
+    rdfs:comment "Indicates that a zoning area or regulation allows a specific activity type."@en ;
+    rdfs:domain up:ZoningArea ;
+    rdfs:range up:ActivityType .
+
+up:hasLandUse
+    a owl:ObjectProperty ;
+    rdfs:label "heeft gebruik"@nl, "has land use"@en ;
+    rdfs:comment "Links a spatial unit to its land use designation."@en ;
+    rdfs:domain geo:Feature ;
+    rdfs:range up:LandUse .
+
+up:appliesTo
+    a owl:ObjectProperty ;
+    rdfs:label "is van toepassing op"@nl, "applies to"@en ;
+    rdfs:comment "Indicates that a regulation applies to a spatial unit or activity."@en ;
+    rdfs:domain up:PlanningRegulation ;
+    rdfs:range geo:Feature .
+
+up:maxHeight
+    a owl:DatatypeProperty ;
+    rdfs:label "maximale hoogte"@nl, "maximum height"@en ;
+    rdfs:comment "Maximum allowed building height in meters."@en ;
+    rdfs:domain up:PlanningRegulation ;
+    rdfs:range xsd:decimal .
+
+up:minHeight
+    a owl:DatatypeProperty ;
+    rdfs:label "minimale hoogte"@nl, "minimum height"@en ;
+    rdfs:comment "Minimum required building height in meters."@en ;
+    rdfs:domain up:PlanningRegulation ;
+    rdfs:range xsd:decimal .
+
+up:floorAreaRatio
+    a owl:DatatypeProperty ;
+    rdfs:label "floor area ratio"@en, "vloeroppervlakte ratio"@nl ;
+    rdfs:comment "Maximum floor area ratio (FAR) allowed."@en ;
+    rdfs:domain up:PlanningRegulation ;
+    rdfs:range xsd:decimal .
+
+up:issuedBy
+    a owl:ObjectProperty ;
+    rdfs:label "uitgegeven door"@nl, "issued by"@en ;
+    rdfs:comment "The authority (municipality, province, etc.) that issued the spatial plan."@en ;
+    rdfs:domain up:SpatialPlan ;
+    rdfs:range <http://data.example.org/def/law#Authority> .
+
+up:planType
+    a owl:DatatypeProperty ;
+    rdfs:label "plantype"@nl, "plan type"@en ;
+    rdfs:comment "Type of spatial plan (e.g., 'omgevingsplan', 'bestemmingsplan', 'structuurvisie')."@en ;
+    rdfs:domain up:SpatialPlan ;
+    rdfs:range xsd:string .
+
+# ============================================================================
+# Individuals / Instances (examples)
+# ============================================================================
+
+# Note: Actual instances will be created by ETL pipelines
+# These are just examples of the structure
+

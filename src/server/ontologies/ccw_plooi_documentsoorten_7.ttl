@@ -1,0 +1,458 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix grddl: <http://www.w3.org/2003/g/data-view#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+@prefix tooiont: <https://identifier.overheid.nl/tooi/def/ont/> .
+@prefix tooiwep: <https://identifier.overheid.nl/tooi/def/thes/wep/> .
+@prefix ministerie: <https://identifier.overheid.nl/tooi/id/ministerie/> .
+@prefix shacl: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix file-type: <http://publications.europa.eu/resource/authority/file-type/> .
+@prefix tooiwl: <https://identifier.overheid.nl/tooi/def/wl/> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf4j: <http://rdf4j.org/schema/rdf4j#> .
+@prefix sesame: <http://www.openrdf.org/schema/sesame#> .
+@prefix fn: <http://www.w3.org/2005/xpath-functions#> .
+
+<https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/7> a owl:Ontology,
+    tooiwl:CollectiegebaseerdeConceptwaardelijst;
+  owl:imports <http://www.w3.org/2004/02/skos/core>, <https://identifier.overheid.nl/tooi/def/ont>,
+    <https://identifier.overheid.nl/tooi/def/wl>, <http://purl.org/pav>;
+  tooiwl:afgeleidVanVersie <https://identifier.overheid.nl/tooi/def/thes/kern-1.5.0>;
+  tooiwl:bronversie "";
+  tooiwl:collectie <https://identifier.overheid.nl/tooi/def/thes/kern/skosCollection_570b2619>;
+  pav:derivedFrom <https://identifier.overheid.nl/tooi/def/thes/kern>;
+  dcterms:description "Waardelijst met documentsoorten ten behoeve van PLOOI.";
+  tooiont:publicatiedatum "2025-05-20";
+  tooiont:titel "PLOOI documentsoorten";
+  tooiont:verantwoordelijke ministerie:mnre1034;
+  tooiwl:volgnummer 7;
+  owl:versionInfo "Dubbelingen verwijderd";
+  prov:generatedAtTime "2025-05-20T10:56:39.069Z"^^xsd:dateTime;
+  tooiont:zichtdatum "2025-05-20"^^xsd:date .
+
+<https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_149a3964> a tooiont:Groeperingsconcept;
+  skos:prefLabel "Woo-procedure"@nl;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_570b2619> .
+
+<https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_1e96f394> a tooiont:Groeperingsconcept;
+  skos:prefLabel "regelgeving en formele besluitvorming"@nl;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_570b2619> .
+
+<https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_570b2619> a tooiont:Groeperingsconcept;
+  skos:prefLabel "PLOOI documentsoort"@nl .
+
+<https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_f49814b2> a tooiont:Groeperingsconcept;
+  skos:prefLabel "publicatieblad"@nl;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_570b2619> .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_75007d14> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_570b2619>;
+  skos:prefLabel "communicatie-uiting"@nl;
+  skos:altLabel "bekendmakingsblad"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_7f9dffa7> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_570b2619>;
+  skos:definition "Ieder document dat een rol speelt op of ten behoeve van een vergadering."@nl;
+  skos:prefLabel "vergaderstuk"@nl;
+  skos:altLabel "notulen"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_7051a61f> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_570b2619>;
+  skos:prefLabel "adviesdocument"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_10eb451d> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_570b2619>;
+  skos:prefLabel "beleidsdocument"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_7ab92a02> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_570b2619>;
+  skos:prefLabel "document van burger"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_93b0d113> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_570b2619>;
+  skos:definition "Een besluit dat niet van algemene strekking is, met inbegrip van het afwijzen van een aanvraag daarvan."@nl,
+    "jci1.3:c:BWBR0005537&hoofdstuk=1&titeldeel=1.1&artikel=1:3"^^xsd:anyURI;
+  skos:prefLabel "beschikking"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_1986dbe5> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_570b2619>;
+  skos:prefLabel "parlementair document"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_3300f29a> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_10eb451d>;
+  skos:definition "Volgens opdracht of krachtens functie uitgebracht schriftelijk verslag over een gebeurtenis of een beschrijving van een toestand."@nl;
+  skos:prefLabel "rapport"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_1c7656ac> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_93b0d113>;
+  skos:prefLabel "beschikking tot handhaving"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_056a75e1> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_1986dbe5>;
+  skos:prefLabel "Kamerstuk"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_dc6ba2eb> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_1986dbe5>;
+  skos:prefLabel "Kamervraag"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_386e74cb> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_570b2619>;
+  skos:prefLabel "convenant"@nl;
+  skos:altLabel "beleidsovereenkomst"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_6bbc9177> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_570b2619>;
+  skos:prefLabel "publicatie"@nl;
+  skos:definition "Restbegrip voor alles wat gepubliceerd kan worden, maar geen passend ander concept heeft."@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_2aedadff> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_75007d14>;
+  skos:prefLabel "toespraak"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_3a121159> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_75007d14>;
+  skos:prefLabel "formulier"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_3eb5572a> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_75007d14>;
+  skos:prefLabel "circulaire"@nl;
+  skos:definition "Een brief die aan verschillende personen of instellingen wordt rondgestuurd. Kan zowel toelichtend als regelgevend van karakter zijn."@nl;
+  skos:altLabel "rondschrijven"@nl, "rondzendbrief"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_7652d853> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_75007d14>;
+  skos:prefLabel "brief"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_6604fe5b> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_75007d14>;
+  skos:prefLabel "mediatekst"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_7eba29ad> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_75007d14>;
+  skos:prefLabel "persbericht"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_97f44ea5> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_75007d14>;
+  skos:prefLabel "brochure"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_9ecc0007> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_75007d14>;
+  skos:prefLabel "organisatiegegevens"@nl;
+  skos:definition "Gegevens over hoe doelstellingen, werkwijze en interne structuur van een organisatie."@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_c2f56984> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_75007d14>;
+  skos:prefLabel "nieuwsbericht"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_42e406dd> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_7f9dffa7>;
+  skos:prefLabel "vergaderverslag"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_d4a4792f> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_7f9dffa7>;
+  skos:prefLabel "besluitenlijst"@nl;
+  skos:definition "Een document dat de op een vergadering genomen besluit (kort) samenvat. Soms fysiek onderdeel van het vergaderverslag."@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_de27ae7a> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_7f9dffa7>;
+  skos:prefLabel "ingekomen stuk"@nl;
+  skos:definition "Een vergaderstuk afkomstig van een actor die niet tot het vergaderende gremium behoort, maar dat op diens verzoek, of op eigen initiatief van het vergaderende gremium op de vergaderagenda is geplaatst, over het algemeen alleen ter informatie."@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_f90465b3> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_7f9dffa7>;
+  skos:prefLabel "agenda"@nl;
+  skos:definition "Een vergaderstuk dat een opsomming bevat van de op een vergadering te bespreken zaken, vaak met vermelding van stukken, tijdsplanning en deelnemers. "@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_1cf18f83> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_149a3964>;
+  skos:prefLabel "Wob-/Woo-verzoek"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_4f50ca9c> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_149a3964>;
+  skos:prefLabel "beslissing op Wob-/Woo-verzoek"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_0e425c23> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_7051a61f>;
+  skos:prefLabel "adviesvoorstel"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_a40458df> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_7051a61f>;
+  skos:prefLabel "adviesaanvraag"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_d506b718> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_7051a61f>;
+  skos:prefLabel "advies"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_fbaa7e4b> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_1e96f394>;
+  skos:prefLabel "beleidsregel"@nl;
+  skos:definition "Een bij besluit vastgestelde algemene regel, niet zijnde een algemeen verbindend voorschrift, omtrent de afweging van belangen, de vaststelling van feiten of de uitleg van wettelijke voorschriften bij het gebruik van een bevoegdheid van een bestuursorgaan (art 1:3 lid 4 Awb)."@nl,
+    "jci1.3:c:BWBR0005537&hoofdstuk=1&titeldeel=1.1&artikel=1:3&lid=4"^^xsd:anyURI .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_41ac5574> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_1e96f394>;
+  skos:prefLabel "richtlijn"@nl;
+  skos:definition "beleidsregel"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_465163c9> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_1e96f394>;
+  skos:prefLabel "besluit"@nl;
+  skos:definition "Een besluit is in de Nederlandse wetgeving een schriftelijke beslissing van een bestuursorgaan, inhoudende een publiekrechtelijke rechtshandeling."@nl;
+  skos:altLabel "publiekrechtelijke rechtshandeling"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_4bd6c154> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_1e96f394>;
+  skos:prefLabel "diplomatieke verklaring"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_5b1055aa> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_1e96f394>;
+  skos:prefLabel "plan"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_995d4fe9> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_1e96f394>;
+  skos:prefLabel "regeling"@nl;
+  skos:definition "ministeriële regeling"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_d2a6707c> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_1e96f394>;
+  skos:prefLabel "ministeriële regeling"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_9376c730> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_10eb451d>;
+  skos:prefLabel "beleidsnota"@nl;
+  skos:altLabel "memo"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_3d782f30> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_10eb451d>;
+  skos:prefLabel "jaarverslag"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_a1dae55d> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_10eb451d>;
+  skos:prefLabel "termijnagenda"@nl;
+  skos:definition "Overzicht van aanstaande en/of openstaande onderwerpen die moeten worden besproken en/of uitgevoerd binnen een bepaalde termijn."@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_a6f44748> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_10eb451d>;
+  skos:prefLabel "jaarplan"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_b3a6a7fc> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_10eb451d>;
+  skos:prefLabel "kaart"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_dfa0ff1f> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_10eb451d>;
+  skos:prefLabel "begroting"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_06a67c95> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_7ab92a02>;
+  skos:prefLabel "bezwaarschrift"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_5824891d> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_7ab92a02>;
+  skos:prefLabel "subsidieaanvraag"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_d943ca24> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_7ab92a02>;
+  skos:prefLabel "ontheffingsaanvraag"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_dad2a6ed> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_7ab92a02>;
+  skos:prefLabel "vergunningaanvraag"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_df2cb56e> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_7ab92a02>;
+  skos:prefLabel "zienswijze"@nl;
+  skos:definition "Reactie die een belanghebbende aan het bevoegd gezag kan sturen als reactie op een ontwerp-besluit."@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_ef935990> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_7ab92a02>;
+  skos:prefLabel "klacht"@nl;
+  skos:altLabel "klaagschrift"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_002fc258> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_93b0d113>;
+  skos:prefLabel "vergunning"@nl;
+  skos:definition "Officiële toestemming van de overheid om een bepaalde activiteit uit te voeren, al dan niet onder bepaalde voorwaarden. "@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_2ab17960> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_93b0d113>;
+  skos:prefLabel "erkenningsbeschikking"@nl;
+  skos:definition "Beschikking waarbij wordt vastgesteld dat een persoon of instelling aan bepaalde eisen voldoet."@nl,
+    "jci1.3:c:BWBR0005730&hoofdstuk=5&paragraaf=5.5&aanwijzing=5.17&lid=4"^^xsd:anyURI .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_2c0438f4> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_93b0d113>;
+  skos:prefLabel "instemmingsbeschikking"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_30e8b503> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_93b0d113>;
+  skos:prefLabel "concessie"@nl;
+  skos:definition "Een concessie is een bij beschikking verleende vergunning van de overheid die anderen uitsluit."@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_acb44d77> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_93b0d113>;
+  skos:prefLabel "benoemingsbeschikking"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_aebfec50> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_93b0d113>;
+  skos:prefLabel "subsidiebeschikking"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_c1956ef0> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_93b0d113>;
+  skos:prefLabel "aanwijzingsbeschikking"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_f7dc55d9> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_93b0d113>;
+  skos:prefLabel "ontheffingsbeschikking"@nl;
+  skos:definition "Beschikking waarbij in een individueel geval een uitzondering op een wettelijk verbod of gebod wordt gemaakt."@nl,
+    "jci1.3:c:BWBR0005730&hoofdstuk=5&paragraaf=5.5&aanwijzing=5.17&lid=2"^^xsd:anyURI;
+  skos:altLabel "ontheffingsbesluit"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_a17ef403> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_1986dbe5>;
+  skos:prefLabel "Handelingen"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_bf0f9c95> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_1986dbe5>;
+  skos:prefLabel "motie"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_f1652921> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_1986dbe5>;
+  skos:prefLabel "niet-dossierstuk"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_0670bae1> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_f49814b2>;
+  skos:prefLabel "Staatscourant"@nl;
+  skos:altLabel "Stcrt"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_12cd7b9b> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_f49814b2>;
+  skos:prefLabel "Blad gemeenschappelijke regeling"@nl;
+  skos:altLabel "Bgr"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_61e3099a> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_f49814b2>;
+  skos:prefLabel "Staatsblad"@nl;
+  skos:altLabel "Stb"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_81cc2eb5> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_f49814b2>;
+  skos:prefLabel "Gemeenteblad"@nl;
+  skos:altLabel "Gmb"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_852da199> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_f49814b2>;
+  skos:prefLabel "Afkondigingsblad"@nl;
+  skos:altLabel "AB"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_b3179555> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_f49814b2>;
+  skos:prefLabel "Tractatenblad"@nl;
+  skos:altLabel "Trb"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_bdc265d5> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_f49814b2>;
+  skos:prefLabel "Provinciaal blad"@nl;
+  skos:altLabel "Prb"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_c97b118a> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/set/ccw_plooi_documentsoorten/k_f49814b2>;
+  skos:prefLabel "Waterschapsblad"@nl;
+  skos:altLabel "Wsb"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_8b92eab4> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_3300f29a>;
+  skos:prefLabel "ambtsbericht"@nl;
+  skos:definition "Een rapport van de minister van Buitenlandse Zaken aan de minister voor Vreemdelingenzaken en Integratie, met informatie over de situatie in een land van herkomst van asielzoekers of over één individuele asielaanvraag, dat wordt gebruikt als informatiebron bij de beoordeling van asielverzoeken."@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_38ba44de> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_3300f29a>;
+  skos:prefLabel "evaluatierapport"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_4efe1293> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_3300f29a>;
+  skos:prefLabel "inspectierapport"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_6f49bf34> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_3300f29a>;
+  skos:prefLabel "onderzoeksrapport"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_99d3e284> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_3300f29a>;
+  skos:prefLabel "verantwoordingsrapport"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_cccba364> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_3300f29a>;
+  skos:prefLabel "voortgangsrapport"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_45be34e9> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_1c7656ac>;
+  skos:prefLabel "beschikking tot opleggen boete"@nl;
+  skos:altLabel "administratieve boete"@nl, "bestuurlijke boete"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_566a4430> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_1c7656ac>;
+  skos:prefLabel "beschikking tot opleggen last onder dwangsom"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_a55b7649> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_1c7656ac>;
+  skos:prefLabel "beschikking tot opleggen last onder bestuursdwang"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_0d0e9b52> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_056a75e1>;
+  skos:prefLabel "nader rapport"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_11305262> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_056a75e1>;
+  skos:prefLabel "memorie van toelichting"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_1422b182> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_056a75e1>;
+  skos:prefLabel "memorie van antwoord"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_2977c34f> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_056a75e1>;
+  skos:prefLabel "beslisnota"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_33d7570c> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_056a75e1>;
+  skos:prefLabel "voorstel van wet"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_49599e6c> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_056a75e1>;
+  skos:prefLabel "Kamerbrief"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_622408c6> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_056a75e1>;
+  skos:prefLabel "nadere memorie van antwoord"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_8f5898e5> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_056a75e1>;
+  skos:prefLabel "nota n.a.v. het nader verslag"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_9b2d26fc> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_056a75e1>;
+  skos:prefLabel "advies Raad van State"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_bee85371> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_056a75e1>;
+  skos:prefLabel "nota n.a.v. het verslag"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_c2052ba5> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_056a75e1>;
+  skos:prefLabel "nota van wijziging"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_03c52ba0> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_dc6ba2eb>;
+  skos:prefLabel "Kamervraag zonder antwoord"@nl .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_6d494ab6> a skos:Concept;
+  skos:broader <https://identifier.overheid.nl/tooi/def/thes/kern/c_dc6ba2eb>;
+  skos:prefLabel "Kamervraag met antwoord"@nl .
+ 

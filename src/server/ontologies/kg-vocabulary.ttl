@@ -1,0 +1,73 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix kg: <http://data.example.org/def/kg#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Internal Knowledge Graph Utilities (kg:)
+# Temporal validity, versioning, and internal utilities
+
+# ============================================================================
+# Properties
+# ============================================================================
+
+kg:validFrom
+    a owl:DatatypeProperty ;
+    rdfs:label "geldig vanaf"@nl, "valid from"@en ;
+    rdfs:comment "Start date/time when a statement or rule becomes valid."@en ;
+    rdfs:range xsd:dateTime ;
+    dct:description "Used for temporal validity of rules, regulations, and eligibility statements."@en .
+
+kg:validTo
+    a owl:DatatypeProperty ;
+    rdfs:label "geldig tot"@nl, "valid to"@en ;
+    rdfs:comment "End date/time when a statement or rule becomes invalid."@en ;
+    rdfs:range xsd:dateTime ;
+    dct:description "Used for temporal validity - if not specified, the statement is currently valid."@en .
+
+kg:version
+    a owl:DatatypeProperty ;
+    rdfs:label "versie"@nl, "version"@en ;
+    rdfs:comment "Version identifier for entities that may change over time."@en ;
+    rdfs:range xsd:string ;
+    dct:description "Used for versioning of documents, plans, and regulations."@en .
+
+kg:sourceGraph
+    a owl:DatatypeProperty ;
+    rdfs:label "bron graph"@nl, "source graph"@en ;
+    rdfs:comment "Named graph URI indicating the source of the data."@en ;
+    rdfs:range xsd:anyURI ;
+    dct:description "Used to track which named graph (batch/source) the data came from."@en .
+
+kg:confidence
+    a owl:DatatypeProperty ;
+    rdfs:label "vertrouwen"@nl, "confidence"@en ;
+    rdfs:comment "Confidence score for extracted or inferred facts (0.0 to 1.0)."@en ;
+    rdfs:range xsd:float ;
+    dct:description "Used for quality scoring of extracted facts and inferences."@en .
+
+kg:lastUpdated
+    a owl:DatatypeProperty ;
+    rdfs:label "laatst bijgewerkt"@nl, "last updated"@en ;
+    rdfs:comment "Timestamp when the entity was last updated."@en ;
+    rdfs:range xsd:dateTime ;
+    dct:description "Used for tracking when entities were last modified."@en .
+
+# ============================================================================
+# Usage Notes
+# ============================================================================
+
+# kg:validFrom and kg:validTo are used for temporal queries:
+# - Rules that apply at a specific point in time
+# - Eligibility statements with validity periods
+# - Versioned documents and plans
+
+# Example SPARQL query for temporal validity:
+# SELECT ?rule WHERE {
+#   ?rule kg:validFrom ?from .
+#   FILTER (?from <= "2024-01-01"^^xsd:date)
+#   OPTIONAL { ?rule kg:validTo ?to }
+#   FILTER (!BOUND(?to) || ?to >= "2024-01-01"^^xsd:date)
+# }
+

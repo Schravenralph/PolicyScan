@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.server.json",
+  "compilerOptions": {
+    "composite": false,
+    "types": ["node", "vitest/globals"],
+    "noEmit": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "tests/**/*.ts",
+    "src/server/**/__tests__/**/*",
+    "src/shared/**/__tests__/**/*",
+    "src/server/**/*.ts",
+    "src/shared/**/*.ts"
+  ]
+}

@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Detail - Beleidsscan</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <style>
+    :root {
+      --bg-primary: #f5f5f5;
+      --bg-secondary: #ffffff;
+      --text-primary: #1a1a1a;
+      --text-secondary: #666;
+      --border-color: #e5e7eb;
+      --shadow: 0 2px 4px rgba(0,0,0,0.1);
+      --shadow-hover: 0 4px 8px rgba(0,0,0,0.15);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --info: #3b82f6;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #1a1a1a;
+      --bg-secondary: #2d2d2d;
+      --text-primary: #f5f5f5;
+      --text-secondary: #a0a0a0;
+      --border-color: #404040;
+      --shadow: 0 2px 4px rgba(0,0,0,0.3);
+      --shadow-hover: 0 4px 8px rgba(0,0,0,0.5);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      padding: 20px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: var(--bg-secondary);
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .header-content {
+      flex: 1;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      color: var(--text-primary);
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: var(--info);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #6b7280;
+    }
+
+    .btn-secondary:hover {
+      background: #4b5563;
+    }
+
+    .btn-success {
+      background: var(--success);
+    }
+
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--bg-secondary);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--info);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: bold;
+      color: var(--text-primary);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 1200px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--bg-secondary);
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .code-container {
+      position: relative;
+      background: #1e1e1e;
+      border-radius: 6px;
+      overflow: hidden;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .code-header {
+      background: #2d2d2d;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #404040;
+    }
+
+    .code-file-name {
+      color: #a0a0a0;
+      font-size: 13px;
+      font-family: monospace;
+    }
+
+    .code-content {
+      padding: 16px;
+    }
+
+    pre[class*="language-"] {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+    }
+
+    code[class*="language-"] {
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .runs-list {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .run-item {
+      padding: 12px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s;
+    }
+
+    .run-item:hover {
+      background: var(--bg-primary);
+    }
+
+    .run-item:last-child {
+      border-bottom: none;
+    }
+
+    .run-info {
+      flex: 1;
+    }
+
+    .run-date {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .run-stats {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .run-stat {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .run-status {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .run-status.passed {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .run-status.failed {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--error);
+    }
+
+    .run-status.skipped {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+
+    .ai-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .ai-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .ai-btn {
+      background: var(--info);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ai-btn:hover {
+      background: #2563eb;
+    }
+
+    .ai-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .ai-btn.explain {
+      background: var(--success);
+    }
+
+    .ai-btn.explain:hover {
+      background: #059669;
+    }
+
+    .ai-btn.improve {
+      background: var(--warning);
+    }
+
+    .ai-btn.improve:hover {
+      background: #d97706;
+    }
+
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 400px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      background: var(--bg-primary);
+    }
+
+    .message {
+      margin-bottom: 16px;
+      padding: 12px;
+      border-radius: 6px;
+      max-width: 85%;
+    }
+
+    .message.user {
+      background: var(--info);
+      color: white;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .message.assistant {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .message-content {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      line-height: 1.6;
+    }
+
+    .message-time {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    .chat-input-container {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-color);
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      resize: none;
+    }
+
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--info);
+    }
+
+    .send-btn {
+      padding: 10px 20px;
+      background: var(--info);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .send-btn:hover {
+      background: #2563eb;
+    }
+
+    .send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .back-link {
+      color: var(--info);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--error);
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      border-left: 3px solid var(--error);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-secondary);
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 2px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s, border-color 0.2s;
+      margin-bottom: -2px;
+    }
+
+    .tab:hover {
+      color: var(--text-primary);
+    }
+
+    .tab.active {
+      color: var(--info);
+      border-bottom-color: var(--info);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 30px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border-color);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -26px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--info);
+      border: 2px solid var(--bg-secondary);
+    }
+
+    .timeline-item.passed::before {
+      background: var(--success);
+    }
+
+    .timeline-item.failed::before {
+      background: var(--error);
+    }
+
+    .timeline-item.skipped::before {
+      background: var(--warning);
+    }
+
+    .timeline-content {
+      background: var(--bg-secondary);
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .timeline-date {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .timeline-status {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .timeline-stats {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 300px;
+      margin-bottom: 20px;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .comparison-select {
+      margin-bottom: 16px;
+    }
+
+    .comparison-select label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .comparison-select select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 14px;
+    }
+
+    .git-info, .cicd-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .info-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .info-value {
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    .info-value.code {
+      font-family: monospace;
+      font-size: 12px;
+      background: var(--bg-primary);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .nav-link:hover {
+      background: var(--info) !important;
+      color: white !important;
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Navigation Bar -->
+    <nav class="navbar" style="background: var(--bg-secondary); padding: 16px 24px; border-radius: 8px; box-shadow: var(--shadow); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <h2 style="margin: 0; font-size: 20px; color: var(--text-primary);">🧪 Test Dashboard</h2>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <a href="/test-dashboard.html" class="nav-link" style="padding: 8px 16px; border-radius: 6px; text-decoration: none; color: var(--text-primary); background: var(--bg-primary); transition: all 0.2s; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">📊 Dashboard</a>
+        <a href="/test-health.html" class="nav-link" style="padding: 8px 16px; border-radius: 6px; text-decoration: none; color: var(--text-primary); background: var(--bg-primary); transition: all 0.2s; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">❤️ Health & Latency</a>
+        <a href="/test-performance.html" class="nav-link" style="padding: 8px 16px; border-radius: 6px; text-decoration: none; color: var(--text-primary); background: var(--bg-primary); transition: all 0.2s; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">⚡ Performance</a>
+        <button class="btn btn-icon" onclick="toggleTheme()" title="Toggle dark mode" style="padding: 8px 12px; font-size: 18px; background: var(--info); color: white; border: none; border-radius: 6px; cursor: pointer;">🌓</button>
+      </div>
+    </nav>
+    
+    <a href="/test-dashboard" class="back-link">← Back to Dashboard</a>
+    
+    <header>
+      <div class="header-content">
+        <h1 id="testTitle">Test Detail</h1>
+        <div class="subtitle" id="testSubtitle">Loading test information...</div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-icon" onclick="toggleTheme()" title="Toggle dark mode">🌓</button>
+        <button class="btn" onclick="loadTestDetail()">🔄 Refresh</button>
+      </div>
+    </header>
+
+    <div class="stats-grid" id="statsGrid">
+      <!-- Stats will be populated here -->
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="card">
+      <div class="tabs">
+        <button class="tab active" data-tab="overview">Overview</button>
+        <button class="tab" data-tab="history">History Timeline</button>
+        <button class="tab" data-tab="trends">Trends</button>
+        <button class="tab" data-tab="compare">Compare Runs</button>
+        <button class="tab" data-tab="code">Test Code</button>
+      </div>
+
+      <!-- Overview Tab -->
+      <div id="overviewTab" class="tab-content active">
+        <div class="content-grid">
+          <!-- Test Runs Section -->
+          <div class="card">
+            <div class="card-title">📊 Recent Test Runs</div>
+            <div id="runsContainer" class="runs-list">
+              <div class="empty-state">
+                <div class="empty-state-icon">⏳</div>
+                <div>Loading test runs...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Visual Outputs Section (Video & Screenshots) -->
+          <div class="card" id="visualOutputsCard" style="display: none;">
+            <div class="card-title">📹 Visual Outputs</div>
+            <div id="visualOutputsContainer">
+              <div class="empty-state">
+                <div class="empty-state-icon">📷</div>
+                <div>No visual outputs available</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Git & CI/CD Info Section -->
+          <div class="card">
+            <div class="card-title">🔗 Git & CI/CD Information</div>
+            <div id="gitCicdContainer">
+              <div class="empty-state">
+                <div class="empty-state-icon">⏳</div>
+                <div>Loading Git/CI-CD information...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- History Timeline Tab -->
+      <div id="historyTab" class="tab-content">
+        <div class="card">
+          <div class="card-title">📅 Test Execution History</div>
+          <div id="timelineContainer" class="timeline">
+            <div class="empty-state">
+              <div class="empty-state-icon">⏳</div>
+              <div>Loading history timeline...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trends Tab -->
+      <div id="trendsTab" class="tab-content">
+        <div class="card">
+          <div class="card-title">📈 Test Trends</div>
+          <div id="trendsContainer">
+            <div class="chart-container">
+              <canvas id="passRateTrendChart"></canvas>
+            </div>
+            <div class="chart-container">
+              <canvas id="durationTrendChart"></canvas>
+            </div>
+            <div class="chart-container">
+              <canvas id="testCountTrendChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compare Runs Tab -->
+      <div id="compareTab" class="tab-content">
+        <div class="card">
+          <div class="card-title">⚖️ Compare Test Runs</div>
+          <div class="comparison-grid">
+            <div>
+              <div class="comparison-select">
+                <label for="compareRun1">First Run:</label>
+                <select id="compareRun1"></select>
+              </div>
+              <div id="compareRun1Details" class="timeline-content"></div>
+            </div>
+            <div>
+              <div class="comparison-select">
+                <label for="compareRun2">Second Run:</label>
+                <select id="compareRun2"></select>
+              </div>
+              <div id="compareRun2Details" class="timeline-content"></div>
+            </div>
+          </div>
+          <div id="comparisonResults" style="margin-top: 20px;"></div>
+        </div>
+      </div>
+
+      <!-- Test Code Tab -->
+      <div id="codeTab" class="tab-content">
+        <div class="card">
+          <div class="card-title">📝 Test Code</div>
+          <div id="codeContainer" class="code-container">
+            <div class="code-header">
+              <span class="code-file-name" id="codeFileName">Loading...</span>
+            </div>
+            <div class="code-content">
+              <pre id="codeContent"><code class="language-typescript">Loading test code...</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Assistant Section -->
+    <div class="card">
+      <div class="card-title">🤖 AI Assistant</div>
+      <div class="ai-section">
+        <div class="ai-buttons">
+          <button class="ai-btn explain" onclick="sendPrompt('explain')" id="explainBtn">
+            💡 Explain Code
+          </button>
+          <button class="ai-btn improve" onclick="sendPrompt('improve')" id="improveBtn">
+            ✨ Suggest Improvements
+          </button>
+        </div>
+        
+        <div class="chat-container">
+          <div class="chat-messages" id="chatMessages">
+            <div class="message assistant">
+              <div class="message-content">Hello! I can help you understand and improve your test code. Use the buttons above or type your own question.</div>
+            </div>
+          </div>
+          <div class="chat-input-container">
+            <textarea 
+              class="chat-input" 
+              id="chatInput" 
+              placeholder="Ask me anything about this test..."
+              rows="1"
+              onkeydown="handleChatKeydown(event)"
+            ></textarea>
+            <button class="send-btn" onclick="sendCustomMessage()" id="sendBtn">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const testId = urlParams.get('testId') || urlParams.get('id');
+    
+    let currentTestData = null;
+    let currentCode = '';
+    let allRuns = [];
+    let passRateChart = null;
+    let durationChart = null;
+    let testCountChart = null;
+
+    // Load theme preference
+    function loadTheme() {
+      const theme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    }
+
+    async function loadTestDetail() {
+      if (!testId) {
+        showError('No test ID provided');
+        return;
+      }
+
+      try {
+        // Load test details
+        const detailsResponse = await fetch(`/api/tests/${encodeURIComponent(testId)}/details`);
+        if (!detailsResponse.ok) {
+          throw new Error('Failed to load test details');
+        }
+        const details = await detailsResponse.json();
+        currentTestData = details;
+
+        // Update header
+        const fileName = details.testFile?.split('/').pop() || testId;
+        document.getElementById('testTitle').textContent = fileName;
+        document.getElementById('testSubtitle').textContent = 
+          `${details.stats.totalRuns} run(s) | Pass Rate: ${details.stats.passRate.toFixed(1)}%`;
+
+        // Update stats
+        updateStats(details.stats);
+
+        // Load test code
+        await loadTestCode();
+
+        // Load test runs
+        await loadTestRuns();
+
+        // Load additional data for new features
+        await loadGitCicdInfo();
+        await loadHistoryTimeline();
+        await loadTrends();
+        await loadComparisonData();
+        
+        // Load visual outputs (video and screenshots)
+        await loadVisualOutputs();
+      } catch (error) {
+        console.error('Error loading test detail:', error);
+        showError(`Failed to load test details: ${error.message}`);
+      }
+    }
+
+    async function loadVisualOutputs() {
+      if (!testId) return;
+      
+      try {
+        const apiBaseUrl = window.API_BASE_URL || '';
+        const response = await fetch(`${apiBaseUrl}/api/tests/${encodeURIComponent(testId)}/visual-outputs`);
+        
+        if (!response.ok) {
+          if (response.status === 404) {
+            // No visual outputs - hide the card
+            const visualCard = document.getElementById('visualOutputsCard');
+            if (visualCard) {
+              visualCard.style.display = 'none';
+            }
+            return;
+          }
+          throw new Error(`Failed to load visual outputs: ${response.statusText}`);
+        }
+        
+        const visualData = await response.json();
+        const container = document.getElementById('visualOutputsContainer');
+        const visualCard = document.getElementById('visualOutputsCard');
+        
+        if (!container || !visualData) return;
+        
+        if (!visualData.video && (!visualData.screenshots || visualData.screenshots.length === 0)) {
+          // No visual outputs - hide the card
+          if (visualCard) {
+            visualCard.style.display = 'none';
+          }
+          return;
+        }
+        
+        // Show the card
+        if (visualCard) {
+          visualCard.style.display = 'block';
+        }
+        
+        let html = '<div style="display: flex; flex-direction: column; gap: 20px;">';
+        
+        // Video section
+        if (visualData.video && visualData.video.url) {
+          const escapedVideoUrl = escapeHtml(visualData.video.url);
+          html += `
+            <div style="margin-bottom: 20px;">
+              <div style="font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">📹 Video Recording</div>
+              <video controls style="width: 100%; max-width: 800px; border-radius: 8px; background: #000;">
+                <source src="${escapedVideoUrl}" type="video/webm">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          `;
+        }
+        
+        // Screenshots section
+        if (visualData.screenshots && visualData.screenshots.length > 0) {
+          html += `
+            <div>
+              <div style="font-weight: 600; margin-bottom: 12px; color: var(--text-primary);">📸 Screenshots (${visualData.screenshots.length})</div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
+          `;
+          
+          visualData.screenshots.forEach((screenshot) => {
+            const escapedUrl = escapeHtml(screenshot.url);
+            const escapedFilename = escapeHtml(screenshot.filename);
+            html += `
+              <div style="position: relative;">
+                <img 
+                  src="${escapedUrl}" 
+                  alt="${escapedFilename}" 
+                  style="width: 100%; height: auto; border-radius: 6px; cursor: pointer; border: 1px solid var(--border-color);"
+                  onclick="window.open('${escapedUrl}', '_blank')"
+                  loading="lazy"
+                />
+                <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px; text-align: center; word-break: break-all;">
+                  ${escapedFilename}
+                </div>
+              </div>
+            `;
+          });
+          
+          html += `
+              </div>
+            </div>
+          `;
+        }
+        
+        html += '</div>';
+        container.innerHTML = html;
+      } catch (error) {
+        console.error('Error loading visual outputs:', error);
+        const container = document.getElementById('visualOutputsContainer');
+        if (container) {
+          container.innerHTML = `<div class="error-message">Failed to load visual outputs: ${error.message}</div>`;
+        }
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function switchTab(tabName, event) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+
+      // Show selected tab content
+      const tabContent = document.getElementById(`${tabName}Tab`);
+      if (tabContent) {
+        tabContent.classList.add('active');
+      }
+
+      // Activate the clicked tab button using event delegation with closest()
+      let tabButton = null;
+      if (event && event.target) {
+        // Use closest() to find the tab button even if a child element was clicked
+        tabButton = event.target.closest('.tab[data-tab]');
+        if (tabButton) {
+          tabButton.classList.add('active');
+        }
+      }
+
+      // Fallback: activate the tab button by tabName using data attribute
+      if (!tabButton) {
+        tabButton = document.querySelector(`.tab[data-tab="${tabName}"]`);
+        if (tabButton) {
+          tabButton.classList.add('active');
+        }
+      }
+
+      // Load data for tabs that need it
+      if (tabName === 'trends' && !passRateChart) {
+        loadTrends();
+      }
+    }
+
+    // Event delegation for tab switching
+    document.addEventListener('click', function(e) {
+      const tabButton = e.target.closest('.tab[data-tab]');
+      if (tabButton) {
+        e.preventDefault();
+        const tabName = tabButton.getAttribute('data-tab');
+        switchTab(tabName, e);
+      }
+    });
+
+    async function loadTestCode() {
+      try {
+        const response = await fetch(`/api/tests/${encodeURIComponent(testId)}/code`);
+        if (!response.ok) {
+          throw new Error('Failed to load test code');
+        }
+        const data = await response.json();
+        currentCode = data.code;
+
+        document.getElementById('codeFileName').textContent = data.fileName || testId;
+        const codeElement = document.getElementById('codeContent');
+        codeElement.innerHTML = `<code class="language-typescript">${escapeHtml(data.code)}</code>`;
+        
+        // Re-run Prism highlighting
+        if (window.Prism) {
+          Prism.highlightElement(codeElement.querySelector('code'));
+        }
+      } catch (error) {
+        console.error('Error loading test code:', error);
+        document.getElementById('codeContent').innerHTML = 
+          '<div class="error-message">Failed to load test code</div>';
+      }
+    }
+
+    async function loadTestRuns() {
+      try {
+        const response = await fetch(`/api/tests/${encodeURIComponent(testId)}/runs`);
+        if (!response.ok) {
+          throw new Error('Failed to load test runs');
+        }
+        const data = await response.json();
+        allRuns = data.runs || [];
+
+        const container = document.getElementById('runsContainer');
+        if (!allRuns || allRuns.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">📋</div>
+              <div>No test runs found</div>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = allRuns.map(run => {
+          const date = new Date(run.timestamp);
+          const passed = run.results?.passed || 0;
+          const failed = run.results?.failed || 0;
+          const skipped = run.results?.skipped || 0;
+          const total = run.results?.total || 0;
+          const duration = ((run.results?.duration || 0) / 1000).toFixed(2);
+          
+          let status = 'passed';
+          if (failed > 0) status = 'failed';
+          else if (skipped === total && total > 0) status = 'skipped';
+
+          return `
+            <div class="run-item">
+              <div class="run-info">
+                <div class="run-date">${date.toLocaleString()}</div>
+                <div class="run-stats">
+                  <span class="run-stat">✅ ${passed}</span>
+                  <span class="run-stat">❌ ${failed}</span>
+                  <span class="run-stat">⏭️ ${skipped}</span>
+                  <span class="run-stat">⏱️ ${duration}s</span>
+                </div>
+              </div>
+              <span class="run-status ${status}">${status}</span>
+            </div>
+          `;
+        }).join('');
+      } catch (error) {
+        console.error('Error loading test runs:', error);
+        document.getElementById('runsContainer').innerHTML = 
+          '<div class="error-message">Failed to load test runs</div>';
+      }
+    }
+
+    async function loadHistoryTimeline() {
+      try {
+        const container = document.getElementById('timelineContainer');
+        if (!container) return;
+        
+        if (!allRuns || allRuns.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">📋</div>
+              <div>No history available</div>
+            </div>
+          `;
+          return;
+        }
+
+        // Sort runs by timestamp (newest first)
+        const sortedRuns = [...allRuns].sort((a, b) => {
+          return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+        });
+
+        container.innerHTML = sortedRuns.map(run => {
+          const date = new Date(run.timestamp);
+          const passed = run.results?.passed || 0;
+          const failed = run.results?.failed || 0;
+          const skipped = run.results?.skipped || 0;
+          const total = run.results?.total || 0;
+          const duration = ((run.results?.duration || 0) / 1000).toFixed(2);
+          const passRate = total > 0 ? ((passed / total) * 100).toFixed(1) : 0;
+          
+          let status = 'passed';
+          if (failed > 0) status = 'failed';
+          else if (skipped === total && total > 0) status = 'skipped';
+
+          const gitInfo = run.git || {};
+          const cicdInfo = run.cicd || {};
+          // Support both commitHash and commit for backward compatibility
+          const commitHash = gitInfo.commitHash || gitInfo.commit;
+
+          return `
+            <div class="timeline-item ${status}">
+              <div class="timeline-content">
+                <div class="timeline-header">
+                  <span class="timeline-date">${date.toLocaleString()}</span>
+                  <span class="timeline-status ${status}">${status}</span>
+                </div>
+                <div class="timeline-stats">
+                  <span>✅ ${passed}</span>
+                  <span>❌ ${failed}</span>
+                  <span>⏭️ ${skipped}</span>
+                  <span>📊 ${passRate}%</span>
+                  <span>⏱️ ${duration}s</span>
+                </div>
+                ${commitHash || cicdInfo.buildNumber ? `
+                  <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color);">
+                    ${commitHash ? `
+                      <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">
+                        Git: ${commitHash.substring(0, 8)} ${gitInfo.branch ? `(${gitInfo.branch})` : ''}
+                      </div>
+                    ` : ''}
+                    ${cicdInfo.buildNumber ? `
+                      <div style="font-size: 12px; color: var(--text-secondary);">
+                        CI/CD: Build #${cicdInfo.buildNumber} ${cicdInfo.environment ? `(${cicdInfo.environment})` : ''}
+                      </div>
+                    ` : ''}
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (error) {
+        console.error('Error loading history timeline:', error);
+        const container = document.getElementById('timelineContainer');
+        if (container) {
+          container.innerHTML = '<div class="error-message">Failed to load history timeline</div>';
+        }
+      }
+    }
+
+    async function loadTrends() {
+      if (!allRuns || allRuns.length === 0) return;
+
+      try {
+        // Prepare data for charts (sort by timestamp, oldest first for trends)
+        const sortedRuns = [...allRuns].sort((a, b) => {
+          return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+        });
+        const labels = sortedRuns.map(run => {
+          const date = new Date(run.timestamp);
+          return date.toLocaleDateString();
+        });
+
+        const passRateData = sortedRuns.map(run => {
+          const total = run.results?.total || 0;
+          const passed = run.results?.passed || 0;
+          return total > 0 ? ((passed / total) * 100) : 0;
+        });
+
+        const durationData = sortedRuns.map(run => {
+          return (run.results?.duration || 0) / 1000; // Convert to seconds
+        });
+
+        const testCountData = sortedRuns.map(run => {
+          return run.results?.total || 0;
+        });
+
+        // Get computed CSS variable values for Chart.js (Chart.js doesn't resolve CSS variables)
+        const rootStyle = getComputedStyle(document.documentElement);
+        const successColor = rootStyle.getPropertyValue('--success').trim() || '#10b981';
+        const infoColor = rootStyle.getPropertyValue('--info').trim() || '#3b82f6';
+
+        // Pass Rate Chart
+        const passRateCtx = document.getElementById('passRateTrendChart');
+        if (passRateCtx) {
+          if (passRateChart) passRateChart.destroy();
+          passRateChart = new Chart(passRateCtx, {
+            type: 'line',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Pass Rate (%)',
+                data: passRateData,
+                borderColor: successColor,
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                tension: 0.4,
+                fill: true
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: true }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 100
+                }
+              }
+            }
+          });
+        }
+
+        // Duration Chart
+        const durationCtx = document.getElementById('durationTrendChart');
+        if (durationCtx) {
+          if (durationChart) durationChart.destroy();
+          durationChart = new Chart(durationCtx, {
+            type: 'line',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Duration (seconds)',
+                data: durationData,
+                borderColor: infoColor,
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                tension: 0.4,
+                fill: true
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: true }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        }
+
+        // Test Count Chart
+        const testCountCtx = document.getElementById('testCountTrendChart');
+        if (testCountCtx) {
+          if (testCountChart) testCountChart.destroy();
+          testCountChart = new Chart(testCountCtx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Total Tests',
+                data: testCountData,
+                backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                borderColor: infoColor,
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: true }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Error loading trends:', error);
+      }
+    }
+
+    async function loadComparisonData() {
+      try {
+        const select1 = document.getElementById('compareRun1');
+        const select2 = document.getElementById('compareRun2');
+
+        if (!select1 || !select2 || !allRuns || allRuns.length === 0) return;
+
+        // Sort runs by timestamp (newest first)
+        const sortedRuns = [...allRuns].sort((a, b) => {
+          return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+        });
+
+        // Populate selects
+        select1.innerHTML = '<option value="">Select first run...</option>';
+        select2.innerHTML = '<option value="">Select second run...</option>';
+
+        sortedRuns.forEach((run, index) => {
+          const date = new Date(run.timestamp);
+          const passed = run.results?.passed || 0;
+          const failed = run.results?.failed || 0;
+          const optionText = `${date.toLocaleString()} - ${passed} passed, ${failed} failed`;
+          const option = `<option value="${index}">${optionText}</option>`;
+          select1.innerHTML += option;
+          select2.innerHTML += option;
+        });
+
+        // Add change handlers
+        select1.onchange = () => updateComparison();
+        select2.onchange = () => updateComparison();
+      } catch (error) {
+        console.error('Error loading comparison data:', error);
+      }
+    }
+
+    function updateComparison() {
+      const select1 = document.getElementById('compareRun1');
+      const select2 = document.getElementById('compareRun2');
+      const details1 = document.getElementById('compareRun1Details');
+      const details2 = document.getElementById('compareRun2Details');
+      const results = document.getElementById('comparisonResults');
+
+      if (!select1 || !select2 || !details1 || !details2 || !results) return;
+
+      // Sort runs by timestamp (newest first) to match the order in loadComparisonData
+      const sortedRuns = [...allRuns].sort((a, b) => {
+        return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+      });
+
+      const index1 = select1.value !== '' ? parseInt(select1.value) : -1;
+      const index2 = select2.value !== '' ? parseInt(select2.value) : -1;
+
+      if (index1 === index2 && index1 !== -1) {
+        results.innerHTML = '<div class="error-message">Please select two different runs to compare</div>';
+        return;
+      }
+
+      if (index1 !== -1 && sortedRuns[index1]) {
+        details1.innerHTML = formatRunDetails(sortedRuns[index1]);
+      } else {
+        details1.innerHTML = '<div class="empty-state">Select a run to compare</div>';
+      }
+
+      if (index2 !== -1 && sortedRuns[index2]) {
+        details2.innerHTML = formatRunDetails(sortedRuns[index2]);
+      } else {
+        details2.innerHTML = '<div class="empty-state">Select a run to compare</div>';
+      }
+
+      if (index1 !== -1 && index2 !== -1 && sortedRuns[index1] && sortedRuns[index2]) {
+        const run1 = sortedRuns[index1];
+        const run2 = sortedRuns[index2];
+        
+        const passed1 = run1.results?.passed || 0;
+        const failed1 = run1.results?.failed || 0;
+        const skipped1 = run1.results?.skipped || 0;
+        const total1 = run1.results?.total || 0;
+        const duration1 = run1.results?.duration || 0;
+        const passRate1 = total1 > 0 ? (passed1 / total1 * 100) : 0;
+
+        const passed2 = run2.results?.passed || 0;
+        const failed2 = run2.results?.failed || 0;
+        const skipped2 = run2.results?.skipped || 0;
+        const total2 = run2.results?.total || 0;
+        const duration2 = run2.results?.duration || 0;
+        const passRate2 = total2 > 0 ? (passed2 / total2 * 100) : 0;
+
+        const passRateDiff = passRate2 - passRate1;
+        const durationDiff = (duration2 - duration1) / 1000;
+        const totalDiff = total2 - total1;
+
+        results.innerHTML = `
+          <div class="card">
+            <div class="card-title">📊 Comparison Results</div>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-label">Pass Rate Change</div>
+                <div class="stat-value" style="color: ${passRateDiff >= 0 ? 'var(--success)' : 'var(--error)'}">
+                  ${passRateDiff >= 0 ? '+' : ''}${passRateDiff.toFixed(1)}%
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Duration Change</div>
+                <div class="stat-value" style="color: ${durationDiff <= 0 ? 'var(--success)' : 'var(--warning)'}">
+                  ${durationDiff >= 0 ? '+' : ''}${durationDiff.toFixed(2)}s
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Total Tests Change</div>
+                <div class="stat-value" style="color: ${totalDiff === 0 ? 'var(--text-secondary)' : 'var(--info)'}">
+                  ${totalDiff >= 0 ? '+' : ''}${totalDiff}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        results.innerHTML = '';
+      }
+    }
+
+    function formatRunDetails(run) {
+      const date = new Date(run.timestamp);
+      const passed = run.results?.passed || 0;
+      const failed = run.results?.failed || 0;
+      const skipped = run.results?.skipped || 0;
+      const total = run.results?.total || 0;
+      const duration = ((run.results?.duration || 0) / 1000).toFixed(2);
+      const passRate = total > 0 ? ((passed / total) * 100).toFixed(1) : 0;
+
+      return `
+        <div>
+          <div style="margin-bottom: 12px;">
+            <strong>${date.toLocaleString()}</strong>
+          </div>
+          <div class="timeline-stats">
+            <span>✅ ${passed}</span>
+            <span>❌ ${failed}</span>
+            <span>⏭️ ${skipped}</span>
+            <span>📊 ${passRate}%</span>
+            <span>⏱️ ${duration}s</span>
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadGitCicdInfo() {
+      try {
+        const container = document.getElementById('gitCicdContainer');
+        if (!allRuns || allRuns.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">📋</div>
+              <div>No runs available</div>
+            </div>
+          `;
+          return;
+        }
+
+        // Get the most recent run with Git/CI-CD info
+        const recentRun = allRuns.find(run => run.git || run.cicd) || allRuns[0];
+        const gitInfo = recentRun.git || {};
+        const cicdInfo = recentRun.cicd || {};
+        // Support both commitHash and commit for backward compatibility
+        const commitHash = gitInfo.commitHash || gitInfo.commit;
+
+        if (!commitHash && !cicdInfo.buildNumber) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">ℹ️</div>
+              <div>Git/CI-CD information not available for this test run</div>
+              <div style="font-size: 12px; margin-top: 8px; color: var(--text-secondary);">
+                This information will be available when Git/CI-CD integration is configured
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = `
+          ${commitHash || gitInfo.branch || gitInfo.author ? `
+            <div style="margin-bottom: 20px;">
+              <div style="font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--text-primary);">
+                🔀 Git Information
+              </div>
+              <div class="git-info">
+                ${commitHash ? `
+                  <div class="info-item">
+                    <div class="info-label">Commit Hash</div>
+                    <div class="info-value code">${commitHash}</div>
+                  </div>
+                ` : ''}
+                ${gitInfo.branch ? `
+                  <div class="info-item">
+                    <div class="info-label">Branch</div>
+                    <div class="info-value">${gitInfo.branch}</div>
+                  </div>
+                ` : ''}
+                ${gitInfo.author ? `
+                  <div class="info-item">
+                    <div class="info-label">Author</div>
+                    <div class="info-value">${gitInfo.author}</div>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          ` : ''}
+          ${cicdInfo.buildNumber || cicdInfo.environment || cicdInfo.pipelineStage ? `
+            <div>
+              <div style="font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--text-primary);">
+                🚀 CI/CD Information
+              </div>
+              <div class="cicd-info">
+                ${cicdInfo.buildNumber ? `
+                  <div class="info-item">
+                    <div class="info-label">Build Number</div>
+                    <div class="info-value">#${cicdInfo.buildNumber}</div>
+                  </div>
+                ` : ''}
+                ${cicdInfo.environment ? `
+                  <div class="info-item">
+                    <div class="info-label">Environment</div>
+                    <div class="info-value">${cicdInfo.environment}</div>
+                  </div>
+                ` : ''}
+                ${cicdInfo.pipelineStage ? `
+                  <div class="info-item">
+                    <div class="info-label">Pipeline Stage</div>
+                    <div class="info-value">${cicdInfo.pipelineStage}</div>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          ` : ''}
+        `;
+      } catch (error) {
+        console.error('Error loading Git/CI-CD info:', error);
+        document.getElementById('gitCicdContainer').innerHTML = 
+          '<div class="error-message">Failed to load Git/CI-CD information</div>';
+      }
+    }
+
+    function updateStats(stats) {
+      const grid = document.getElementById('statsGrid');
+      grid.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-label">Total Runs</div>
+          <div class="stat-value">${stats.totalRuns}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pass Rate</div>
+          <div class="stat-value">${stats.passRate.toFixed(1)}%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Tests</div>
+          <div class="stat-value">${stats.totalTests}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Avg Duration</div>
+          <div class="stat-value">${(stats.avgDuration / 1000).toFixed(1)}s</div>
+        </div>
+      `;
+    }
+
+    async function sendPrompt(promptType) {
+      const explainBtn = document.getElementById('explainBtn');
+      const improveBtn = document.getElementById('improveBtn');
+      
+      explainBtn.disabled = true;
+      improveBtn.disabled = true;
+
+      addMessage('user', promptType === 'explain' ? 'Explain this test code' : 'Suggest improvements for this test code');
+      
+      const thinkingMsg = addMessage('assistant', 'Thinking...');
+      thinkingMsg.querySelector('.message-content').innerHTML = '<span class="loading"></span> Thinking...';
+
+      try {
+        const response = await fetch(`/api/tests/${encodeURIComponent(testId)}/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ promptType }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to get AI response');
+        }
+
+        const data = await response.json();
+        thinkingMsg.querySelector('.message-content').textContent = data.response;
+      } catch (error) {
+        console.error('Error getting AI response:', error);
+        thinkingMsg.querySelector('.message-content').textContent = 
+          `Error: ${error.message}. Make sure the AI service is configured.`;
+      } finally {
+        explainBtn.disabled = false;
+        improveBtn.disabled = false;
+      }
+    }
+
+    async function sendCustomMessage() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      
+      if (!message) return;
+
+      input.value = '';
+      addMessage('user', message);
+
+      const thinkingMsg = addMessage('assistant', 'Thinking...');
+      thinkingMsg.querySelector('.message-content').innerHTML = '<span class="loading"></span> Thinking...';
+
+      const sendBtn = document.getElementById('sendBtn');
+      sendBtn.disabled = true;
+
+      try {
+        const response = await fetch(`/api/tests/${encodeURIComponent(testId)}/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to get AI response');
+        }
+
+        const data = await response.json();
+        thinkingMsg.querySelector('.message-content').textContent = data.response;
+      } catch (error) {
+        console.error('Error getting AI response:', error);
+        thinkingMsg.querySelector('.message-content').textContent = 
+          `Error: ${error.message}. Make sure the AI service is configured.`;
+      } finally {
+        sendBtn.disabled = false;
+      }
+    }
+
+    function addMessage(role, content) {
+      const container = document.getElementById('chatMessages');
+      const message = document.createElement('div');
+      message.className = `message ${role}`;
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'message-content';
+      contentDiv.textContent = content;
+      
+      const timeDiv = document.createElement('div');
+      timeDiv.className = 'message-time';
+      timeDiv.textContent = new Date().toLocaleTimeString();
+      
+      message.appendChild(contentDiv);
+      message.appendChild(timeDiv);
+      container.appendChild(message);
+      
+      container.scrollTop = container.scrollHeight;
+      
+      return message;
+    }
+
+    function handleChatKeydown(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendCustomMessage();
+      }
+    }
+
+    function showError(message) {
+      const container = document.querySelector('.container');
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'error-message';
+      errorDiv.textContent = message;
+      container.insertBefore(errorDiv, container.firstChild);
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+
+    // Initialize
+    loadTheme();
+    if (testId) {
+      loadTestDetail();
+    } else {
+      showError('No test ID provided in URL. Use ?testId=... or ?id=...');
+    }
+  </script>
+</body>
+</html>
+

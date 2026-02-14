@@ -1,0 +1,359 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: #F7F4EF;
+    --foreground: #161620;
+
+    --card: #F7F4EF;
+    --card-foreground: #161620;
+
+    --popover: #F7F4EF;
+    --popover-foreground: #161620;
+
+    --input-background: #F7F4EF;
+
+    --primary: #002EA3;
+    --primary-foreground: #FFFFFF;
+
+    --secondary: #7A6A47; /* goldText - Darker gold for better contrast (4.5:1+ with white text) */
+    --secondary-foreground: #FFFFFF;
+
+    --accent: #BF581A;
+    --accent-foreground: #161620; /* Dark text - 6.11:1 contrast (meets WCAG AA) */
+
+    --muted: #E5E5E5;
+    --muted-foreground: #5C4F35; /* goldDark - Meets WCAG AA (5.2:1 contrast on muted background) */
+
+    --destructive: #DC2626;
+    --destructive-foreground: #FFFFFF;
+
+    --border: #E5E5E5;
+    --input: #E5E5E5;
+    --ring: #002EA3;
+
+    --radius: 0.5rem;
+  }
+
+  * {
+    border-color: #E5E5E5;
+  }
+
+  body {
+    background-color: #F7F4EF;
+    color: #161620;
+    font-family: 'Futura PT Book', sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Abhaya Libre', serif;
+  }
+}
+
+@layer utilities {
+  /* Polonaise effect: left-to-right brightness wave (not pulse) */
+  /* Default state is 100% brightness, wave creates brightness variation */
+  @keyframes polonaise-shimmer {
+    0% {
+      opacity: 1.0;
+      filter: brightness(1.0);
+    }
+    50% {
+      opacity: 1.0;
+      filter: brightness(1.3);
+    }
+    100% {
+      opacity: 1.0;
+      filter: brightness(1.0);
+    }
+  }
+
+  /* Thought bubbles fade out when complete (no pulse) */
+  @keyframes thought-bubble-fade {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .animate-thought-bubble {
+    /* No animation - thought bubbles should fade out when done, not pulse */
+  }
+}
+
+/* Ensure all small popup components have opaque backgrounds - NO TRANSPARENCY ALLOWED */
+@layer components {
+  /* Toast notifications (Sonner) - ensure opaque backgrounds */
+  [data-sonner-toast],
+  [data-sonner-toast] > * {
+    opacity: 1 !important;
+  }
+  
+  .toaster [data-sonner-toast] {
+    opacity: 1 !important;
+  }
+  
+  /* Ensure toast backgrounds are fully opaque */
+  [data-sonner-toast] {
+    background-color: hsl(var(--background)) !important;
+    opacity: 1 !important;
+  }
+  
+  /* Force all Radix UI popup content to be fully opaque */
+  [data-radix-popover-content],
+  [data-radix-tooltip-content],
+  [data-radix-dropdown-menu-content],
+  [data-radix-context-menu-content],
+  [data-radix-select-content],
+  [data-radix-menubar-content],
+  [data-radix-navigation-menu-content],
+  [data-radix-hover-card-content],
+  [data-radix-popover-content] > *,
+  [data-radix-tooltip-content] > *,
+  [data-radix-dropdown-menu-content] > *,
+  [data-radix-context-menu-content] > *,
+  [data-radix-select-content] > *,
+  [data-radix-menubar-content] > *,
+  [data-radix-navigation-menu-content] > *,
+  [data-radix-hover-card-content] > * {
+    opacity: 1 !important;
+  }
+  
+  /* Ensure all popup-like floating elements are opaque */
+  [data-slot="popover-content"],
+  [data-slot="tooltip-content"],
+  [data-slot="dropdown-menu-content"],
+  [data-slot="context-menu-content"],
+  [data-slot="hover-card-content"],
+  [data-slot="menubar-content"],
+  [data-slot="select-content"],
+  [data-slot="navigation-menu-content"],
+  [data-slot="navigation-menu-viewport"] {
+    opacity: 1 !important;
+  }
+  
+  /* Catch any other popup-like elements with z-index and absolute/fixed positioning */
+  [role="tooltip"],
+  [role="menu"],
+  [role="listbox"],
+  [role="dialog"][aria-modal="false"] {
+    opacity: 1 !important;
+  }
+  
+  /* Ensure all content inside dialogs is fully opaque */
+  [role="dialog"][aria-modal="true"] > *,
+  [data-radix-dialog-content] > *,
+  [data-radix-dialog-content] * {
+    opacity: 1 !important;
+  }
+  
+  /* Force dialog content backgrounds to be fully opaque */
+  [data-radix-dialog-content] div[class*="bg-"],
+  [data-radix-dialog-content] div[class*="bg-"] * {
+    opacity: 1 !important;
+  }
+  
+  /* Replace transparent backgrounds within dialogs with fully opaque versions */
+  /* This targets all elements with transparent background classes using attribute selectors */
+  
+  /* Replace bg-muted with bg-background in dialogs for full opacity */
+  [data-radix-dialog-content] [class*="bg-muted"]:not([class*="bg-muted-foreground"]) {
+    background-color: hsl(var(--background)) !important;
+    opacity: 1 !important;
+  }
+  
+  /* Target background transparent backgrounds */
+  [data-radix-dialog-content] [class*="bg-background/"],
+  [data-radix-dialog-content] [class*="bg-background\\/"] {
+    background-color: hsl(var(--background)) !important;
+    opacity: 1 !important;
+  }
+  
+  /* Target primary transparent backgrounds */
+  [data-radix-dialog-content] [class*="bg-primary/"],
+  [data-radix-dialog-content] [class*="bg-primary\\/"] {
+    background-color: hsl(var(--muted)) !important; /* Use muted instead of transparent primary */
+    opacity: 1 !important;
+  }
+  
+  /* Override green transparent backgrounds (used in version comparison dialogs) */
+  /* Match both regular and dark mode variants */
+  [data-radix-dialog-content] [class*="bg-green-50"],
+  [data-radix-dialog-content] [class*="bg-green-100"],
+  [data-radix-dialog-content] [class*="bg-green-950/"],
+  [data-radix-dialog-content] [class*="bg-green-950\\/"],
+  [data-radix-dialog-content] [class*="bg-green-900/"],
+  [data-radix-dialog-content] [class*="bg-green-900\\/"] {
+    /* Use fully opaque green backgrounds for light mode */
+    background-color: rgb(240 253 244) !important; /* green-50 */
+    opacity: 1 !important;
+  }
+  
+  /* Dark mode green backgrounds - use darker but still opaque */
+  .dark [data-radix-dialog-content] [class*="bg-green-950/"],
+  .dark [data-radix-dialog-content] [class*="bg-green-950\\/"],
+  .dark [data-radix-dialog-content] [class*="bg-green-900/"],
+  .dark [data-radix-dialog-content] [class*="bg-green-900\\/"] {
+    background-color: rgb(20 83 45) !important; /* green-950 */
+    opacity: 1 !important;
+  }
+  
+  /* Universal rule: Force all elements within dialogs to be fully opaque */
+  /* This ensures no transparency leaks through */
+  [data-radix-dialog-content] > *,
+  [data-radix-dialog-content] * {
+    opacity: 1 !important;
+  }
+  
+  /* Exception: Allow close button to have opacity transitions for hover effect */
+  [data-radix-dialog-content] [data-radix-dialog-close] {
+    opacity: 0.7 !important;
+  }
+  
+  [data-radix-dialog-content] [data-radix-dialog-close]:hover {
+    opacity: 1 !important;
+  }
+  
+  /* Also target using data-dialog-content attribute for better specificity */
+  [data-dialog-content="true"] [class*="bg-muted/"],
+  [data-dialog-content="true"] [class*="bg-muted\\/"],
+  [data-dialog-content="true"] [class*="bg-background/"],
+  [data-dialog-content="true"] [class*="bg-background\\/"],
+  [data-dialog-content="true"] [class*="bg-primary/"],
+  [data-dialog-content="true"] [class*="bg-primary\\/"],
+  [data-dialog-content="true"] [class*="bg-green-"] {
+    opacity: 1 !important;
+  }
+  
+  /* ============================================
+     GUARANTEED OPAQUE OVERLAYS - NO EXCEPTIONS
+     ============================================
+     Force ALL dialog/modal/sheet/drawer overlays to be 80% opaque white.
+     Dialog content itself should be 100% opaque white (handled separately).
+     This applies to EVERY popup that appears, regardless of component or library.
+     ============================================ */
+  
+  /* Radix UI Dialog Overlays - 80% opaque white background */
+  /* IMPORTANT: Only target overlay elements, NOT content elements */
+  [data-radix-dialog-overlay]:not([data-radix-dialog-content]):not([data-slot*="content"]) {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    opacity: 1 !important;
+  }
+  
+  /* Radix UI Alert Dialog Overlays */
+  [data-radix-alert-dialog-overlay]:not([data-radix-alert-dialog-content]):not([data-slot*="content"]) {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    opacity: 1 !important;
+  }
+  
+  /* Sheet Overlays (using data-slot) */
+  [data-slot="sheet-overlay"]:not([data-slot*="content"]) {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    opacity: 1 !important;
+  }
+  
+  /* Drawer Overlays (using data-slot) */
+  [data-slot="drawer-overlay"]:not([data-slot*="content"]) {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    opacity: 1 !important;
+  }
+  
+  /* Alert Dialog Overlays (using data-slot) */
+  [data-slot="alert-dialog-overlay"]:not([data-slot*="content"]) {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    opacity: 1 !important;
+  }
+  
+  /* Catch-all for any overlay with fixed positioning and z-50+ */
+  /* This ensures ANY popup overlay is 80% opaque white, even custom ones */
+  [class*="fixed"][class*="inset-0"][class*="z-50"][class*="backdrop-blur"],
+  [class*="fixed"][class*="inset-0"][class*="z-[50]"][class*="backdrop-blur"],
+  [class*="fixed"][class*="inset-0"][class*="z-[100]"][class*="backdrop-blur"] {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    opacity: 1 !important;
+  }
+  
+  /* Force any overlay element with backdrop-blur to have 80% opaque white background */
+  /* Only apply to elements that are positioned as overlays (fixed inset-0) */
+  /* Exclude content elements to prevent applying overlay styles to dialog content */
+  [class*="backdrop-blur"][class*="fixed"][class*="inset-0"]:not([data-radix-dialog-content]):not([data-radix-alert-dialog-content]):not([data-slot*="content"]) {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    opacity: 1 !important;
+  }
+  
+  /* Override any transparent background classes on overlays - force to 80% white */
+  [data-radix-dialog-overlay][class*="bg-white/"],
+  [data-radix-dialog-overlay][class*="bg-white\\/"],
+  [data-radix-alert-dialog-overlay][class*="bg-white/"],
+  [data-radix-alert-dialog-overlay][class*="bg-white\\/"],
+  [data-slot="sheet-overlay"][class*="bg-white/"],
+  [data-slot="sheet-overlay"][class*="bg-white\\/"],
+  [data-slot="drawer-overlay"][class*="bg-white/"],
+  [data-slot="drawer-overlay"][class*="bg-white\\/"],
+  [data-slot="alert-dialog-overlay"][class*="bg-white/"],
+  [data-slot="alert-dialog-overlay"][class*="bg-white\\/"] {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    opacity: 1 !important;
+  }
+  
+  /* Override any bg-black/ with any opacity - force to 80% opaque white */
+  [data-radix-dialog-overlay][class*="bg-black/"],
+  [data-radix-alert-dialog-overlay][class*="bg-black/"],
+  [data-slot="sheet-overlay"][class*="bg-black/"],
+  [data-slot="drawer-overlay"][class*="bg-black/"],
+  [data-slot="alert-dialog-overlay"][class*="bg-black/"] {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    opacity: 1 !important;
+  }
+  
+  /* ============================================
+     DIALOG CONTENT - 100% OPAQUE WHITE
+     ============================================
+     Ensure all dialog content/popups/panels are fully opaque white
+     ============================================ */
+  
+  /* Force dialog content to be fully opaque white - HIGHEST PRIORITY */
+  /* Target all possible dialog content selectors with maximum specificity */
+  [data-radix-dialog-content],
+  [data-radix-dialog-content][class*="bg-"],
+  [data-radix-dialog-content].bg-background,
+  [data-radix-dialog-content].bg-white,
+  [data-radix-alert-dialog-content],
+  [data-radix-alert-dialog-content][class*="bg-"],
+  [data-radix-alert-dialog-content].bg-background,
+  [data-radix-alert-dialog-content].bg-white,
+  [data-slot="sheet-content"],
+  [data-slot="sheet-content"][class*="bg-"],
+  [data-slot="sheet-content"].bg-background,
+  [data-slot="sheet-content"].bg-white,
+  [data-slot="drawer-content"],
+  [data-slot="drawer-content"][class*="bg-"],
+  [data-slot="drawer-content"].bg-background,
+  [data-slot="drawer-content"].bg-white,
+  [data-slot="alert-dialog-content"],
+  [data-slot="alert-dialog-content"][class*="bg-"],
+  [data-slot="alert-dialog-content"].bg-background,
+  [data-slot="alert-dialog-content"].bg-white,
+  [data-dialog-content="true"],
+  [data-dialog-content="true"][class*="bg-"] {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    opacity: 1 !important;
+  }
+  
+  /* Also target any nested elements that might have transparent backgrounds */
+  [data-radix-dialog-content] *,
+  [data-radix-alert-dialog-content] *,
+  [data-slot="sheet-content"] *,
+  [data-slot="drawer-content"] *,
+  [data-slot="alert-dialog-content"] * {
+    opacity: 1 !important;
+  }
+}

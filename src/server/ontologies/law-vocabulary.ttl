@@ -1,0 +1,135 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix eli: <http://data.europa.eu/eli/ontology#> .
+@prefix law: <http://data.example.org/def/law#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Legal Vocabulary (law:)
+# Aligned with ELI ontology for European legal instruments
+
+# ============================================================================
+# Classes
+# ============================================================================
+
+law:LegalInstrument
+    a owl:Class ;
+    rdfs:label "Rechtsinstrument"@nl, "Legal Instrument"@en ;
+    rdfs:comment "A legal instrument (law, regulation, decree, etc.)."@en ;
+    rdfs:subClassOf eli:LegalResource ;
+    dct:description "Represents legal instruments such as laws (wetten), regulations (AMvB's), municipal bylaws (APV's), etc."@en .
+
+law:LegalProvision
+    a owl:Class ;
+    rdfs:label "Rechtsbepaling"@nl, "Legal Provision"@en ;
+    rdfs:comment "A specific provision, article, or clause within a legal instrument."@en ;
+    rdfs:subClassOf eli:LegalResource ;
+    dct:description "Represents individual articles (artikelen), paragraphs (leden), or clauses within legal instruments."@en .
+
+law:Procedure
+    a owl:Class ;
+    rdfs:label "Procedure"@nl, "Procedure"@en ;
+    rdfs:comment "A legal or administrative procedure."@en ;
+    dct:description "Represents procedures such as permit applications, appeals, consultations, etc."@en .
+
+law:Authority
+    a owl:Class ;
+    rdfs:label "Bevoegd gezag"@nl, "Authority"@en ;
+    rdfs:comment "A legal or administrative authority (municipality, province, ministry, etc.)."@en ;
+    rdfs:subClassOf <http://xmlns.com/foaf/0.1/Organization> ;
+    dct:description "Represents authorities that can issue legal instruments or make decisions."@en .
+
+law:LegalSubject
+    a owl:Class ;
+    rdfs:label "Rechtssubject"@nl, "Legal Subject"@en ;
+    rdfs:comment "A subject matter or topic addressed by legal provisions."@en ;
+    dct:description "Represents legal subjects/topics (e.g., 'waterkwaliteit', 'geluid', 'bodem')."@en .
+
+law:Requirement
+    a owl:Class ;
+    rdfs:label "Vereiste"@nl, "Requirement"@en ;
+    rdfs:comment "A requirement or condition specified in a legal provision."@en ;
+    dct:description "Represents requirements such as permits, notifications, standards, thresholds, etc."@en .
+
+# ============================================================================
+# Properties
+# ============================================================================
+
+law:containsProvision
+    a owl:ObjectProperty ;
+    rdfs:label "bevat bepaling"@nl, "contains provision"@en ;
+    rdfs:comment "Links a legal instrument to its provisions."@en ;
+    rdfs:domain law:LegalInstrument ;
+    rdfs:range law:LegalProvision .
+
+law:definesProcedure
+    a owl:ObjectProperty ;
+    rdfs:label "definieert procedure"@nl, "defines procedure"@en ;
+    rdfs:comment "Links a legal provision to procedures it defines."@en ;
+    rdfs:domain law:LegalProvision ;
+    rdfs:range law:Procedure .
+
+law:issuedBy
+    a owl:ObjectProperty ;
+    rdfs:label "uitgegeven door"@nl, "issued by"@en ;
+    rdfs:comment "The authority that issued the legal instrument."@en ;
+    rdfs:domain law:LegalInstrument ;
+    rdfs:range law:Authority .
+
+law:appliesToSubject
+    a owl:ObjectProperty ;
+    rdfs:label "is van toepassing op onderwerp"@nl, "applies to subject"@en ;
+    rdfs:comment "Indicates that a legal provision applies to a specific legal subject."@en ;
+    rdfs:domain law:LegalProvision ;
+    rdfs:range law:LegalSubject .
+
+law:requires
+    a owl:ObjectProperty ;
+    rdfs:label "vereist"@nl, "requires"@en ;
+    rdfs:comment "Links a legal provision to requirements it imposes."@en ;
+    rdfs:domain law:LegalProvision ;
+    rdfs:range law:Requirement .
+
+law:articleNumber
+    a owl:DatatypeProperty ;
+    rdfs:label "artikelnummer"@nl, "article number"@en ;
+    rdfs:comment "The article number within a legal instrument."@en ;
+    rdfs:domain law:LegalProvision ;
+    rdfs:range xsd:string .
+
+law:paragraphNumber
+    a owl:DatatypeProperty ;
+    rdfs:label "lidnummer"@nl, "paragraph number"@en ;
+    rdfs:comment "The paragraph number (lid) within an article."@en ;
+    rdfs:domain law:LegalProvision ;
+    rdfs:range xsd:string .
+
+law:instrumentType
+    a owl:DatatypeProperty ;
+    rdfs:label "instrumenttype"@nl, "instrument type"@en ;
+    rdfs:comment "Type of legal instrument (e.g., 'Wet', 'AMvB', 'APV', 'Verordening')."@en ;
+    rdfs:domain law:LegalInstrument ;
+    rdfs:range xsd:string .
+
+law:procedureType
+    a owl:DatatypeProperty ;
+    rdfs:label "proceduretype"@nl, "procedure type"@en ;
+    rdfs:comment "Type of procedure (e.g., 'vergunningaanvraag', 'bezwaar', 'beroep')."@en ;
+    rdfs:domain law:Procedure ;
+    rdfs:range xsd:string .
+
+# ============================================================================
+# Alignment with ELI ontology
+# ============================================================================
+
+law:LegalInstrument
+    rdfs:subClassOf eli:LegalResource .
+
+law:LegalProvision
+    rdfs:subClassOf eli:LegalResource .
+
+# Reuse ELI properties where applicable
+# law:issuedBy can be aligned with eli:is_realized_by
+# law:containsProvision can be aligned with eli:contains
+

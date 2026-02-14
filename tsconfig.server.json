@@ -1,0 +1,64 @@
+{
+    "extends": "./tsconfig.node.json",
+    "compilerOptions": {
+        "composite": true,
+        "noEmit": true,
+        "allowImportingTsExtensions": false,
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "target": "ES2022",
+        "lib": [
+            "ES2023"
+        ],
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "types": [
+            "node",
+            "vitest/globals"
+        ]
+    },
+    "include": [
+        "src/server/**/*.ts",
+        "src/shared/**/*.ts",
+        "scripts/**/*.ts",
+        "tests/fixtures/**/*.ts",
+        "tests/__helpers__/**/*.ts",
+        "tests/utils/**/*.ts",
+        "tests/workflow-steps/**/*.ts",
+        "tests/e2e/fixtures/**/*.ts",
+        "skills/**/*.ts",
+        "src/client/utils/translationVerifier.ts",
+        "src/client/utils/logClustering.ts",
+        "src/client/utils/errorHandler.ts",
+        "src/client/utils/errorMessages.ts",
+        "src/client/types/logTypes.ts",
+        "src/client/utils/semanticSimilarity.ts",
+        "src/client/utils/assertEquals.ts",
+        "src/client/utils/i18n.ts",
+        "src/client/utils/logTranslations.ts"
+    ],
+    "exclude": [
+        "**/node_modules",
+        "**/dist",
+        "**/build",
+        "**/.turbo",
+        "**/.next",
+        "**/coverage",
+        "**/.cache",
+        "**/tmp",
+        "**/test-results",
+        "**/playwright-report",
+        "**/allure-results",
+        "tests/**/*.test.ts",
+        "tests/**/*.spec.ts",
+        "**/__tests__",
+        "**/*conflicted*",
+        "tests/archive/**",
+        "src/server/scripts/explore-with-puppeteer.ts",
+        "src/server/scripts/verify-graph-population.ts"
+    ],
+    "ts-node": {
+        "files": true
+    }
+}

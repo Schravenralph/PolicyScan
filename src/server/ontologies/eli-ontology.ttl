@@ -1,0 +1,16 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://data.europa.eu/w21/06f60848-8434-4fe9-837d-1a93103be785>
+  a dcat:Dataset ;
+  dc:title "ELI ontology"@en ;
+  dc:modified "2024-02-16T16:21:19+00:00"^^xsd:dateTime ;
+  dc:issued "2019-02-07T12:15:47+00:00"^^xsd:dateTime ;
+  dc:description "<p>The European Legislation Identifier (ELI) is a framework to make legislation metadata available online in a standardised format, so that it can be accessed, exchanged and reused across borders. For general information about ELI (governance, tools and news), and the implementation status of ELI by various stakeholders (in particular, the way ELI is implemented by the Office of Publications on Eur- Lex), please consult the <a href=\"http://eur-lex.europa.eu/eli-register/about.html\" target=\"_blank\">ELI Register</a> on Eur-Lex.</p><p>&nbsp;</p><p><strong>Please refer to the </strong><a href=\"https://publications.europa.eu/en/web/eu-vocabularies/eli\"><strong>ELI page on the EU-vocabularies portal</strong></a><strong> for more details.</strong></p>" ;
+  dc:language <http://publications.europa.eu/resource/authority/language/ENG> ;
+  dc:publisher <http://data.europa.eu/w21/f6b747d3-8356-410e-bfd4-4bc228fef773> ;
+  dc:type <http://data.europa.eu/dr8/6.0.0/MetadataDataObject>, <http://data.europa.eu/dr8/6.0.0/SharedLegalContentGrouping>, <http://data.europa.eu/dr8/6.0.0/PublicPolicyCycleBusinessProcess> ;
+  dcat:contactPoint <http://data.europa.eu/w21/cd9cf2e9-84e3-4ed9-bb79-26b0427cacf0> ;
+  dc:hasVersion <http://data.europa.eu/w21/f332afb9-8da8-4b23-bcf2-fc18bf02c741>, <http://data.europa.eu/w21/1898694d-ac34-4892-971d-400a5e035a8b> .
+

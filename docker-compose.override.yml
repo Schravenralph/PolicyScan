@@ -1,0 +1,6 @@
+services:
+  backend:
+    environment:
+      # FEATURE_E2E_FIXTURES is DISABLED - must use real API calls in production
+      # Only enable for E2E testing by setting FEATURE_E2E_FIXTURES=false explicitly
+      # - FEATURE_E2E_FIXTURES=false

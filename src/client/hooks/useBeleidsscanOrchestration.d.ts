@@ -1,0 +1,148 @@
+/**
+ * useBeleidsscanOrchestration Hook
+ *
+ * Orchestrates all hook setup and data preparation for the Beleidsscan component.
+ * This hook consolidates all the hook calls and data transformations to reduce
+ * the main component size.
+ */
+import type { BeleidsscanDraft } from './useDraftPersistence';
+import type { CanonicalDocument } from '../services/api';
+import type { LightweightDocument } from '../utils/documentStateOptimization';
+import type { BeleidsscanContextValue } from '../context/BeleidsscanContext';
+interface UseBeleidsscanOrchestrationProps {
+    context: BeleidsscanContextValue;
+    onBack: () => void;
+}
+export declare function useBeleidsscanOrchestration({ context, onBack }: UseBeleidsscanOrchestrationProps): {
+    state: import("../reducers/beleidsscanReducer").BeleidsscanState;
+    dispatch: import("react").Dispatch<import("../reducers/beleidsscanReducer").BeleidsscanAction>;
+    actions: {
+        setStep: (step: number) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setShowGraphVisualizer: (show: boolean) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setShowWorkflowImport: (show: boolean) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setShowDocumentPreview: (show: boolean) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setShowPresetDialog: (show: boolean) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setShowPreviousSets: (show: boolean) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setShowStep2Info: (show: boolean) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setShowScrapingInfo: (show: boolean) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setShowStep1Info: (show: boolean) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setShowStep3Info: (show: boolean) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setShowApiKeysError: (show: boolean) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setShowWorkflowInfo: (show: boolean) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setShowHelp: (show: boolean) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setPreviewDocument: (document: CanonicalDocument | LightweightDocument | null) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setPresetName: (name: string) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setScrapingRunId: (runId: string | null) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        setWorkflowRunId: (runId: string | null) => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        closeAllModals: () => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        resetPresetDialog: () => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+        reset: () => import("../reducers/beleidsscanReducer").BeleidsscanAction;
+    };
+    queryId: string | null;
+    isEditingCompletedSet: boolean;
+    originalQueryId: string | null;
+    hasDraft: boolean;
+    lastDraftSavedAt: string | null;
+    lastDraftSummary: import("./useDraftPersistence").DraftSummary | null;
+    showReconciliationDialog: boolean;
+    reconciliationResult: import("../services/draftReconciliation").ReconciliationResult | null;
+    pendingDraft: BeleidsscanDraft | null;
+    overheidslagen: import("../components/Beleidsscan/constants").OverheidslaagConfig[];
+    gemeenten: string[];
+    waterschappen: string[];
+    provincies: string[];
+    rijksorganisaties: string[];
+    isLoadingJurisdictions: boolean;
+    suggestedWebsites: import("./useWebsiteSuggestions").BronWebsite[];
+    isScrapingWebsites: boolean;
+    scrapingProgress: number;
+    scrapingStatus: string;
+    scrapingDocumentsFound: number;
+    scrapingEstimatedTime: number | null;
+    filteredDocuments: LightweightDocument[];
+    documentFilter: import("./useDocumentFiltering").DocumentFilter;
+    documentSortBy: import("./useDocumentFiltering").DocumentSortBy;
+    documentSortDirection: import("./useDocumentFiltering").DocumentSortDirection;
+    documentSearchQuery: string;
+    debouncedDocumentSearchQuery: string;
+    documentTypeFilter: string | null;
+    documentDateFilter: import("./useDocumentFiltering").DocumentDateFilter;
+    documentWebsiteFilter: string | null;
+    uniqueDocumentTypes: string[];
+    uniqueDocumentWebsites: import("../components/Beleidsscan/utils").WebsiteInfo[];
+    documentCounts: import("../components/Beleidsscan/utils").DocumentCounts;
+    filterPresets: import("./useFilterPresets").FilterPreset[];
+    isLoadingWebsites: boolean;
+    websiteGenerationProgress: number;
+    websiteGenerationStatus: string;
+    websiteGenerationEstimatedTime: number | undefined;
+    websiteSuggestionsError: Error | null;
+    onBack: () => void;
+    setShowStep1Info: (show: boolean) => void;
+    setShowStep3Info: (show: boolean) => void;
+    setShowWorkflowInfo: (show: boolean) => void;
+    setShowReconciliationDialog: import("react").Dispatch<import("react").SetStateAction<boolean>>;
+    handleGenerateWebsites: () => Promise<void>;
+    handleSelectAllWebsites: () => void;
+    handleScrapeWebsites: () => Promise<void>;
+    handleStepNavigation: (targetStep: number) => Promise<void>;
+    handleRestoreDraft: () => void;
+    handleDiscardDraft: () => void;
+    handleStartFresh: () => Promise<void>;
+    handleFinalizeDraft: () => Promise<void>;
+    handleUpdateCompletedSet: () => Promise<void>;
+    handleDuplicateCompletedSet: () => Promise<void>;
+    handleDiscardLoadedSet: () => void;
+    handleSelectAllDocuments: () => void;
+    handleStatusChange: (id: string, status: "approved" | "rejected" | "pending") => Promise<void>;
+    handleBulkApprove: () => Promise<void>;
+    handleBulkReject: () => Promise<void>;
+    handleExportDocuments: (format: "csv" | "json" | "markdown" | "xlsx", scope: "all" | "filtered" | "selected") => Promise<void>;
+    handlePreviewDocument: (document: CanonicalDocument | LightweightDocument) => void;
+    handleOpenWorkflowImport: () => void;
+    handleUseClientDraft: () => void;
+    handleUseServerState: () => void;
+    handleMergeDrafts: () => void;
+    handleIgnoreConflict: () => Promise<void>;
+    handleLoadCompletedSet: (query: import("../services/api").QueryData) => Promise<void>;
+    clearWebsiteSuggestionsError: () => void;
+    cancelWebsiteGeneration: () => void;
+    saveDraftToStorage: () => void;
+    loadDraftFromStorage: () => BeleidsscanDraft | null;
+    restoreDraft: () => void;
+    saveFilterPreset: (preset: Omit<import("./useFilterPresets").FilterPreset, "id">) => import("./useFilterPresets").FilterPreset;
+    deleteFilterPreset: (presetId: string) => void;
+    setDocumentFilter: (filter: import("./useDocumentFiltering").DocumentFilter) => void;
+    setDocumentSortBy: (sortBy: import("./useDocumentFiltering").DocumentSortBy) => void;
+    setDocumentSortDirection: (direction: import("./useDocumentFiltering").DocumentSortDirection) => void;
+    setDocumentSearchQuery: (query: string) => void;
+    setDocumentTypeFilter: (type: string | null) => void;
+    setDocumentDateFilter: (filter: import("./useDocumentFiltering").DocumentDateFilter) => void;
+    setDocumentWebsiteFilter: (website: string | null) => void;
+    setShowPreviousSets: (show: boolean) => void;
+    getCharacterCounterColor: () => string;
+    formatDraftTimestamp: (timestamp?: string | null) => string | null;
+    availableWorkflowOutputs: {
+        name: string;
+        createdAt: string;
+    }[];
+    selectedWorkflowOutput: string | null;
+    workflowOutput: import("../services/api").WorkflowOutput | null;
+    isLoadingWorkflowOutputs: boolean;
+    isImportingWorkflow: boolean;
+    onSelectWorkflowOutput: (outputName: string) => Promise<void>;
+    onImportWorkflowResults: () => Promise<void>;
+    onLoadWorkflowOutputs: () => Promise<void>;
+    onCloseWorkflowImport: () => void;
+    showDraftRestorePrompt: boolean;
+    setShowDraftRestorePrompt: (show: boolean) => void;
+    apiKeysError: {
+        message: string;
+        canUseMock: boolean;
+        missingKeys?: Record<string, boolean>;
+    } | null;
+    onUseMockSuggestions: () => Promise<void>;
+    documentsLoadAttemptedRef: import("react").RefObject<Map<string, number>>;
+    wizardSession: import("../services/api/WizardApiService").WizardSession | null;
+};
+export {};

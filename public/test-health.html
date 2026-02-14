@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health & Latency - Test Dashboard - Beleidsscan</title>
+  <style>
+    :root {
+      --bg-primary: #f5f5f5;
+      --bg-secondary: #ffffff;
+      --text-primary: #1a1a1a;
+      --text-secondary: #666;
+      --border-color: #e5e7eb;
+      --shadow: 0 2px 4px rgba(0,0,0,0.1);
+      --shadow-hover: 0 4px 8px rgba(0,0,0,0.15);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --info: #3b82f6;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #1a1a1a;
+      --bg-secondary: #2d2d2d;
+      --text-primary: #f5f5f5;
+      --text-secondary: #a0a0a0;
+      --border-color: #404040;
+      --shadow: 0 2px 4px rgba(0,0,0,0.3);
+      --shadow-hover: 0 4px 8px rgba(0,0,0,0.5);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      padding: 20px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .navbar {
+      background: var(--bg-secondary);
+      padding: 16px 24px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .navbar h2 {
+      margin: 0;
+      font-size: 20px;
+      color: var(--text-primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--text-primary);
+      background: var(--bg-primary);
+      transition: all 0.2s;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link:hover {
+      background: var(--info);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .nav-link.active {
+      background: var(--info);
+      color: white;
+    }
+
+    .btn {
+      background: var(--info);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    .btn-icon {
+      padding: 8px 12px;
+      font-size: 18px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--bg-secondary);
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      border-left: 4px solid;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .stat-card.success { border-left-color: var(--success); }
+    .stat-card.warning { border-left-color: var(--warning); }
+    .stat-card.error { border-left-color: var(--error); }
+    .stat-card.info { border-left-color: var(--info); }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-size: 36px;
+      font-weight: bold;
+      color: var(--text-primary);
+    }
+
+    .chart-card {
+      background: var(--bg-secondary);
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .chart-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-secondary);
+    }
+
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border-left: 4px solid var(--error);
+    }
+
+    [data-theme="dark"] .error {
+      background: #7f1d1d;
+      color: #fee2e2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <h2>🧪 Test Dashboard</h2>
+      <div class="nav-links">
+        <a href="/test-dashboard.html" class="nav-link">📊 Dashboard</a>
+        <a href="/test-health.html" class="nav-link active">❤️ Health & Latency</a>
+        <a href="/test-performance.html" class="nav-link">⚡ Performance</a>
+        <button class="btn btn-icon" onclick="toggleTheme()" title="Toggle dark mode">🌓</button>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div style="background: var(--bg-secondary); padding: 30px; border-radius: 8px; box-shadow: var(--shadow); margin-bottom: 20px;">
+      <h1 style="font-size: 32px; margin-bottom: 10px; color: var(--text-primary);">❤️ Health & Latency</h1>
+      <p style="color: var(--text-secondary); font-size: 14px;">Monitor backend connection health and response times</p>
+    </div>
+
+    <!-- Controls -->
+    <div style="margin-bottom: 20px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+      <button class="btn" onclick="loadBackendConnections()" style="padding: 6px 16px;">🔄 Refresh</button>
+      <span id="connectionsTimestamp" style="color: var(--text-secondary); font-size: 14px;"></span>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="stats-grid" id="connectionsSummary">
+      <!-- Will be populated by JavaScript -->
+    </div>
+
+    <!-- Connection Details -->
+    <div class="chart-card">
+      <div class="chart-title">🔌 Backend Connection Status</div>
+      <div id="connectionsList" style="padding: 16px;">
+        <div class="loading">Loading connection status...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme management
+    let currentTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+
+    function toggleTheme() {
+      currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      localStorage.setItem('theme', currentTheme);
+    }
+
+    // Escape HTML helper
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    /**
+     * Load backend connections status
+     */
+    async function loadBackendConnections() {
+      const connectionsList = document.getElementById('connectionsList');
+      const connectionsSummary = document.getElementById('connectionsSummary');
+      const connectionsTimestamp = document.getElementById('connectionsTimestamp');
+      
+      connectionsList.innerHTML = '<div class="loading">Loading connection status...</div>';
+      connectionsSummary.innerHTML = '';
+      
+      try {
+        const response = await fetch('/api/tests/backend-connections');
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        
+        const data = await response.json();
+        renderBackendConnections(data);
+        
+        if (connectionsTimestamp) {
+          const date = new Date(data.timestamp);
+          connectionsTimestamp.textContent = `Last updated: ${date.toLocaleString()}`;
+        }
+      } catch (error) {
+        console.error('Error loading backend connections:', error);
+        connectionsList.innerHTML = `<div class="error">Error loading connections: ${escapeHtml(error.message)}</div>`;
+      }
+    }
+
+    /**
+     * Render backend connections status
+     */
+    function renderBackendConnections(data) {
+      const { summary, results } = data;
+      
+      // Render summary cards
+      const summaryHtml = `
+        <div class="stat-card ${summary.failed > 0 ? 'error' : 'success'}">
+          <div class="stat-label">✅ Successful</div>
+          <div class="stat-value">${summary.successful}</div>
+        </div>
+        <div class="stat-card ${summary.failed > 0 ? 'error' : 'info'}">
+          <div class="stat-label">❌ Failed</div>
+          <div class="stat-value">${summary.failed}</div>
+        </div>
+        <div class="stat-card ${summary.skipped > 0 ? 'warning' : 'info'}">
+          <div class="stat-label">⏭️ Skipped</div>
+          <div class="stat-value">${summary.skipped}</div>
+        </div>
+        <div class="stat-card info">
+          <div class="stat-label">📦 Total</div>
+          <div class="stat-value">${summary.total}</div>
+        </div>
+      `;
+      
+      const connectionsSummary = document.getElementById('connectionsSummary');
+      if (connectionsSummary) {
+        connectionsSummary.innerHTML = summaryHtml;
+      }
+      
+      // Render connection details
+      const connectionsHtml = results.map(result => {
+        const statusIcon = result.status === 'success' ? '✅' : 
+                          result.status === 'failure' ? '❌' : 
+                          result.status === 'warning' ? '⚠️' : '⏭️';
+        
+        const statusColor = result.status === 'success' ? 'var(--success)' : 
+                            result.status === 'failure' ? 'var(--error)' : 
+                            result.status === 'warning' ? 'var(--warning)' : 'var(--text-secondary)';
+        
+        let detailsHtml = '';
+        if (result.details && Object.keys(result.details).length > 0) {
+          detailsHtml = `
+            <div style="margin-top: 12px; padding: 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
+              <div style="font-weight: 600; margin-bottom: 8px; font-size: 13px;">Details:</div>
+              <pre style="margin: 0; font-size: 12px; color: var(--text-secondary); white-space: pre-wrap; word-wrap: break-word;">${JSON.stringify(result.details, null, 2)}</pre>
+            </div>
+          `;
+        }
+        
+        let errorHtml = '';
+        if (result.error) {
+          errorHtml = `
+            <div style="margin-top: 8px; padding: 8px; background: rgba(239, 68, 68, 0.1); border-left: 3px solid var(--error); border-radius: 4px;">
+              <div style="font-weight: 600; color: var(--error); font-size: 13px;">Error:</div>
+              <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">${escapeHtml(result.error)}</div>
+            </div>
+          `;
+        }
+        
+        const latencyHtml = result.latency ? `<span style="color: var(--text-secondary); font-size: 13px;"> (${result.latency}ms)</span>` : '';
+        
+        return `
+          <div style="padding: 16px; margin-bottom: 12px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; border-left: 4px solid ${statusColor};">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 24px;">${statusIcon}</span>
+                <div>
+                  <div style="font-weight: 600; font-size: 16px; color: var(--text-primary);">${escapeHtml(result.name)}</div>
+                  <div style="font-size: 14px; color: var(--text-secondary); margin-top: 2px;">${escapeHtml(result.message)}${latencyHtml}</div>
+                </div>
+              </div>
+              <div style="padding: 4px 12px; background: ${statusColor}; color: white; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase;">
+                ${result.status}
+              </div>
+            </div>
+            ${detailsHtml}
+            ${errorHtml}
+          </div>
+        `;
+      }).join('');
+      
+      const connectionsList = document.getElementById('connectionsList');
+      if (connectionsList) {
+        connectionsList.innerHTML = connectionsHtml || '<div class="no-data">No connection data available</div>';
+      }
+    }
+
+    // Load on page load
+    loadBackendConnections();
+  </script>
+</body>
+</html>
+
+
+
+
+

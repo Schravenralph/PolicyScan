@@ -1,0 +1,53 @@
+<!-- Shared Navigation Bar -->
+<nav class="navbar" style="background: var(--bg-secondary); padding: 16px 24px; border-radius: 8px; box-shadow: var(--shadow); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <h2 style="margin: 0; font-size: 20px; color: var(--text-primary);">🧪 Test Dashboard</h2>
+  </div>
+  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+    <a href="/test-dashboard.html" class="nav-link" id="nav-dashboard" style="padding: 8px 16px; border-radius: 6px; text-decoration: none; color: var(--text-primary); background: var(--bg-primary); transition: all 0.2s; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
+      📊 Dashboard
+    </a>
+    <a href="/test-health.html" class="nav-link" id="nav-health" style="padding: 8px 16px; border-radius: 6px; text-decoration: none; color: var(--text-primary); background: var(--bg-primary); transition: all 0.2s; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
+      ❤️ Health & Latency
+    </a>
+    <a href="/test-performance.html" class="nav-link" id="nav-performance" style="padding: 8px 16px; border-radius: 6px; text-decoration: none; color: var(--text-primary); background: var(--bg-primary); transition: all 0.2s; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
+      ⚡ Performance
+    </a>
+    <button class="btn btn-icon" onclick="toggleTheme()" title="Toggle dark mode" style="padding: 8px 12px; font-size: 18px; background: var(--info); color: white; border: none; border-radius: 6px; cursor: pointer;">🌓</button>
+  </div>
+</nav>
+
+<style>
+  .nav-link:hover {
+    background: var(--info) !important;
+    color: white !important;
+    transform: translateY(-1px);
+  }
+  
+  .nav-link.active {
+    background: var(--info) !important;
+    color: white !important;
+  }
+</style>
+
+<script>
+  // Highlight active nav link based on current page
+  (function() {
+    const currentPage = window.location.pathname.split('/').pop() || 'test-dashboard.html';
+    const navId = currentPage === 'test-dashboard.html' ? 'nav-dashboard' :
+                  currentPage === 'test-health.html' ? 'nav-health' :
+                  currentPage === 'test-performance.html' ? 'nav-performance' : null;
+    
+    if (navId) {
+      const navLink = document.getElementById(navId);
+      if (navLink) {
+        navLink.classList.add('active');
+      }
+    }
+  })();
+</script>
+
+
+
+
+

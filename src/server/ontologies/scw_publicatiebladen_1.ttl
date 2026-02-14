@@ -1,0 +1,79 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ministerie: <https://identifier.overheid.nl/tooi/id/ministerie/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix tooi: <https://identifier.overheid.nl/tooi/def/> .
+@prefix tooiont: <https://identifier.overheid.nl/tooi/def/ont/> .
+@prefix tooiwl: <https://identifier.overheid.nl/tooi/def/wl/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://identifier.overheid.nl/tooi/set/scw_publicatiebladen/1> a owl:Ontology, tooiwl:SchemagebaseerdeConceptwaardelijst;
+  dcterms:description "Waardelijst met publicatiebladen die door de wet als zodanig zijn genoemd.";
+  pav:derivedFrom <https://identifier.overheid.nl/tooi/def/thes/kern>;
+  owl:imports <http://purl.org/pav>, <http://www.w3.org/2004/02/skos/core>, tooi:ont,
+    tooi:wl;
+  owl:versionInfo "Eerste versie waardelijst Publicatiebladen op zichtdatum 15-11-2021.";
+  prov:generatedAtTime "2021-11-15T17:50:44.504+01:00"^^xsd:dateTime;
+  tooiont:publicatiedatum "2021-11-15";
+  tooiont:titel "Publicatiebladen";
+  tooiont:verantwoordelijke ministerie:mnre1034;
+  tooiont:zichtdatum "2021-11-15"^^xsd:date;
+  tooiwl:afgeleidVanVersie "";
+  tooiwl:bronversie "";
+  tooiwl:schema <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad>;
+  tooiwl:volgnummer 1 .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_0670bae1> a skos:Concept;
+  skos:altLabel "Stcrt"@nl;
+  skos:inScheme <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad>;
+  skos:prefLabel "Staatscourant"@nl;
+  skos:topConceptOf <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad> .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_12cd7b9b> a skos:Concept;
+  skos:altLabel "Bgr"@nl;
+  skos:inScheme <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad>;
+  skos:prefLabel "Blad gemeenschappelijke regeling"@nl;
+  skos:topConceptOf <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad> .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_61e3099a> a skos:Concept;
+  skos:altLabel "Stb"@nl;
+  skos:inScheme <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad>;
+  skos:prefLabel "Staatsblad"@nl;
+  skos:topConceptOf <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad> .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_81cc2eb5> a skos:Concept;
+  skos:altLabel "Gmb"@nl;
+  skos:inScheme <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad>;
+  skos:prefLabel "Gemeenteblad"@nl;
+  skos:topConceptOf <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad> .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_852da199> a skos:Concept;
+  skos:altLabel "AB"@nl;
+  skos:inScheme <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad>;
+  skos:prefLabel "Afkondigingsblad"@nl;
+  skos:topConceptOf <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad> .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_b3179555> a skos:Concept;
+  skos:altLabel "Trb"@nl;
+  skos:inScheme <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad>;
+  skos:prefLabel "Tractatenblad"@nl;
+  skos:topConceptOf <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad> .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_bdc265d5> a skos:Concept;
+  skos:altLabel "Prb"@nl;
+  skos:inScheme <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad>;
+  skos:prefLabel "Provinciaal blad"@nl;
+  skos:topConceptOf <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad> .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/c_c97b118a> a skos:Concept;
+  skos:altLabel "Wsb"@nl;
+  skos:inScheme <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad>;
+  skos:prefLabel "Waterschapsblad"@nl;
+  skos:topConceptOf <https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad> .
+
+<https://identifier.overheid.nl/tooi/def/thes/kern/publicatieblad> a skos:ConceptScheme;
+  skos:prefLabel "publicatieblad"@nl .
+ 
