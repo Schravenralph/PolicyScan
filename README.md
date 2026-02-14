@@ -1,76 +1,74 @@
 # Beleidsscan
 
-Een uitgebreide React + TypeScript applicatie voor het scannen, analyseren en ontdekken van Nederlandse overheidsbeleidsdocumenten (beleidsdocumenten). Gebouwd met Vite, Express, MongoDB en geavanceerde AI-gedreven zoekmogelijkheden.
+A comprehensive React + TypeScript application for scanning, analyzing, and discovering Dutch government policy documents (beleidsdocumenten). Built with Vite, Express, MongoDB, and advanced AI-powered search capabilities.
 
-> 📖 **English version available**: [README.en.md](./README.en.md)
+## Overview
 
-## Overzicht
+Beleidsscan enables policymakers and urban planners to discover, analyze, and understand policy documents across the entire Dutch government landscape. The application features:
 
-Beleidsscan stelt beleidsmakers en stedenbouwkundigen in staat om beleidsdocumenten te ontdekken, analyseren en begrijpen in het hele Nederlandse overheidslandschap. De applicatie bevat:
+- **Multi-step wizard workflow** for discovering policy documents from multiple sources
+- **Hybrid retrieval system** combining keyword and semantic search
+- **Knowledge graph integration** for relationship mapping and reasoning
+- **Vector embeddings** for semantic document similarity
+- **Automated web scraping** from government websites and databases
+- **Document review and approval workflow**
 
-- **Multi-step wizard workflow** voor het ontdekken van beleidsdocumenten uit meerdere bronnen
-- **Hybride retrievalsysteem** dat zoekwoorden en semantisch zoeken combineert
-- **Knowledge graph integratie** voor relatiemapping en redenering
-- **Vector embeddings** voor semantische documentgelijkenis
-- **Geautomatiseerd web scraping** van overheidswebsites en databases
-- **Document review en goedkeuringsworkflow**
+## Quick Start
 
-## Snel Starten
+### Option 1: Docker (Recommended)
 
-### Optie 1: Docker (Aanbevolen)
-
-Docker containerisatie voorkomt PC-crashes door resource-intensieve tests en scrapers, en biedt geïsoleerde omgevingen voor alle services.
+Docker containerization prevents PC crashes from resource-intensive tests and scrapers, and provides isolated environments for all services.
 
 ```bash
-# Bouw en start alle services
+# Build and start all services
 docker compose up -d
 
-# Of start alleen de applicatie
+# Or start just the application
 docker compose up -d app
 
-# Voer tests veilig uit in geïsoleerde container
+# Run tests safely in isolated container
 docker compose run --rm test pnpm test
 
-# Bekijk logs
+# View logs
 docker compose logs -f app
 
-# Toegang op http://localhost:5173
+# Access at http://localhost:5173
 ```
 
-📚 **Zie [DOCKER.md](./DOCKER.md) voor de volledige Docker gebruikersgids**
+📚 **See [DOCKER.md](./DOCKER.md) for complete Docker usage guide**
 
-### Optie 2: Lokale Installatie
+### Option 2: Local Installation
 
-#### Vereisten
-- Node.js v18 of hoger
-- MongoDB Atlas account (of lokale MongoDB)
-- pnpm (aanbevolen)
-- (Optioneel) Neo4j voor hiërarchische knowledge graph functies
-- (Optioneel) Redis voor achtergrond job processing
-- (Optioneel) Ollama voor lokale LLM reranking - Zie [Ollama Setup Guide](./docs/02-development/ollama-setup.md)
+#### Prerequisites
+- Node.js v18 or higher
+- MongoDB Atlas account (or local MongoDB)
+- pnpm (recommended)
+- (Optional) Neo4j for hierarchical knowledge graph features
+- (Optional) Redis for background job processing
+- (Optional) Ollama for local LLM reranking - See [Ollama Setup Guide](./docs/02-development/ollama-setup.md)
 
-#### Installatie
+#### Installation
 
-1. **Clone en installeer dependencies:**
+1. **Clone and install dependencies:**
    ```bash
    pnpm install
    cd server && pnpm install && cd ..
    ```
 
-2. **Stel omgevingsvariabelen in:**
+2. **Set up environment variables:**
    ```bash
-   # Kopieer het voorbeeldbestand en vul je waarden in
+   # Copy the example file and fill in your values
    cp .env.example .env
-   # Bewerk .env en voeg je MongoDB connection string en andere vereiste waarden toe
+   # Edit .env and add your MongoDB connection string and other required values
    ```
 
-3. **Start de applicatie:**
+3. **Start the application:**
    ```bash
-   # Start beide services met health checks
+   # Start both services with health checks
    pnpm start
    ```
 
-   Of voer services apart uit:
+   Or run services separately:
    ```bash
    # Terminal 1 - Backend
    pnpm run dev:backend
@@ -79,87 +77,87 @@ docker compose logs -f app
    pnpm run dev
    ```
 
-4. **Seed de database (optioneel maar aanbevolen):**
+4. **Seed the database (optional but recommended):**
    ```bash
-   # Seed brondocumenten en websites
+   # Seed source documents and websites
    pnpm run seed
    
-   # Of seed alleen websites
+   # Or seed websites only
    pnpm run seed:websites
    ```
 
-5. **Open je browser:**
+5. **Open your browser:**
    - Frontend: http://localhost:5173
    - Backend API: http://localhost:4000
-   - API Documentatie: http://localhost:4000/api-docs
+   - API Documentation: http://localhost:4000/api-docs
 
-## Beschikbare Scripts
+## Available Scripts
 
-### Docker Commando's (Aanbevolen)
+### Docker Commands (Recommended)
 
-| Script | Beschrijving |
+| Script | Description |
 |--------|-------------|
-| `pnpm start` | Start applicatie met Docker en health checks |
-| `pnpm start:build` | Bouw en start Docker containers |
-| `pnpm start:logs` | Start Docker containers met log output |
-| `pnpm stop` | Stop alle Docker containers |
-| `pnpm restart` | Herstart Docker containers |
-| `pnpm run docker:up` | Start Docker containers op de achtergrond |
+| `pnpm start` | Start application with Docker and health checks |
+| `pnpm start:build` | Build and start Docker containers |
+| `pnpm start:logs` | Start Docker containers with log output |
+| `pnpm stop` | Stop all Docker containers |
+| `pnpm restart` | Restart Docker containers |
+| `pnpm run docker:up` | Start Docker containers in background |
 | `pnpm run docker:down` | Stop Docker containers |
-| `pnpm run docker:logs` | Bekijk Docker container logs |
-| `pnpm run docker:ps` | Toon draaiende Docker containers |
-| `docker compose build` | Bouw alle Docker images |
-| `docker compose run --rm test pnpm test` | Voer tests uit in geïsoleerde container |
-| `docker stats` | Monitor resource gebruik |
+| `pnpm run docker:logs` | View Docker container logs |
+| `pnpm run docker:ps` | List running Docker containers |
+| `docker compose build` | Build all Docker images |
+| `docker compose run --rm test pnpm test` | Run tests in isolated container |
+| `docker stats` | Monitor resource usage |
 
 ### Development Scripts
 
-| Script | Beschrijving |
+| Script | Description |
 |--------|-------------|
 | `pnpm run dev` | Start frontend development server (Vite) |
-| `pnpm run dev:backend` | Start backend development server met watch mode |
-| `pnpm run dev:frontend` | Start frontend met backend health check |
-| `pnpm run dev:all` | Start zowel backend als frontend gelijktijdig |
-| `pnpm run server` | Voer backend server direct uit (geen watch) |
-| `pnpm run server:dev` | Voer backend server uit met watch mode |
+| `pnpm run dev:backend` | Start backend development server with watch mode |
+| `pnpm run dev:frontend` | Start frontend with backend health check |
+| `pnpm run dev:all` | Start both backend and frontend concurrently |
+| `pnpm run server` | Run backend server directly (no watch) |
+| `pnpm run server:dev` | Run backend server with watch mode |
 
 ### Build Scripts
 
-| Script | Beschrijving |
+| Script | Description |
 |--------|-------------|
-| `pnpm run build` | Bouw alleen frontend |
-| `pnpm run build:backend` | Bouw backend TypeScript |
-| `pnpm run build:frontend` | Bouw frontend voor productie |
-| `pnpm run build:all` | Bouw zowel backend als frontend |
-| `pnpm run preview` | Preview productie build lokaal |
+| `pnpm run build` | Build frontend only |
+| `pnpm run build:backend` | Build backend TypeScript |
+| `pnpm run build:frontend` | Build frontend for production |
+| `pnpm run build:all` | Build both backend and frontend |
+| `pnpm run preview` | Preview production build locally |
 
 ### Testing Scripts
 
-| Script | Beschrijving |
+| Script | Description |
 |--------|-------------|
-| `pnpm test` | Voer alle Jest tests uit (⚠️ kan PC crashen, gebruik Docker in plaats daarvan) |
-| `pnpm run test:watch` | Voer tests uit in watch mode |
-| `pnpm run test:unit` | Voer alleen unit tests uit (`@unit` tag) |
-| `pnpm run test:integration` | Voer alleen integration tests uit (`@integration` tag) |
-| `pnpm run test:e2e` | Voer Playwright E2E tests uit |
-| `pnpm run test:e2e:smoke` | Voer smoke E2E tests uit |
-| `pnpm run test:component` | Voer React component tests uit |
-| `pnpm run test:contract` | Voer contract tests uit |
-| `pnpm run test:pipeline` | Voer volledige test pipeline uit (unit + integration + e2e) |
-| `pnpm run coverage` | Genereer test coverage rapport |
-| `pnpm run coverage:unit` | Genereer unit test coverage |
-| `pnpm run coverage:integration` | Genereer integration test coverage |
+| `pnpm test` | Run all Jest tests (⚠️ can crash PC, use Docker instead) |
+| `pnpm run test:watch` | Run tests in watch mode |
+| `pnpm run test:unit` | Run unit tests only (`@unit` tag) |
+| `pnpm run test:integration` | Run integration tests only (`@integration` tag) |
+| `pnpm run test:e2e` | Run Playwright E2E tests |
+| `pnpm run test:e2e:smoke` | Run smoke E2E tests |
+| `pnpm run test:component` | Run React component tests |
+| `pnpm run test:contract` | Run contract tests |
+| `pnpm run test:pipeline` | Run full test pipeline (unit + integration + e2e) |
+| `pnpm run coverage` | Generate test coverage report |
+| `pnpm run coverage:unit` | Generate unit test coverage |
+| `pnpm run coverage:integration` | Generate integration test coverage |
 
-### Health & Validatie Scripts
+### Health & Validation Scripts
 
-| Script | Beschrijving |
+| Script | Description |
 |--------|-------------|
-| `pnpm run health-check` | Controleer of alle services draaien |
-| `pnpm run startup-check` | Verifieer omgevingssetup |
-| `pnpm run validate:docker` | Valideer Docker configuratie |
-| `pnpm run lint` | Voer ESLint uit op alle code |
+| `pnpm run health-check` | Check if all services are running |
+| `pnpm run startup-check` | Verify environment setup |
+| `pnpm run validate:docker` | Validate Docker configuration |
+| `pnpm run lint` | Run ESLint on all code |
 
-## Projectstructuur
+## Project Structure
 
 ```
 beleidsscan/
@@ -167,69 +165,69 @@ beleidsscan/
 │   ├── client/            # Frontend source
 │   │   ├── components/    # React components (wizard, UI components)
 │   │   ├── services/      # API service layer
-│   │   └── styles/        # CSS styles en Tailwind config
+│   │   └── styles/        # CSS styles and Tailwind config
 │   ├── server/            # Backend source
-│   │   ├── config/        # Server configuratie
+│   │   ├── config/        # Server configuration
 │   │   ├── models/        # MongoDB models
 │   │   ├── routes/        # Express API routes
 │   │   ├── services/      # Business logic services
-│   │   ├── workflows/     # Workflow definities en acties
+│   │   ├── workflows/     # Workflow definitions and actions
 │   │   ├── types/         # TypeScript types
-│   │   └── utils/         # Utility functies
-│   └── shared/            # Gedeelde types en utilities
-├── server/                # Backend entry point en config
-│   └── dist/              # Gecompileerde backend output
-├── tests/                 # Test bestanden
+│   │   └── utils/         # Utility functions
+│   └── shared/            # Shared types and utilities
+├── server/                # Backend entry point and config
+│   └── dist/              # Compiled backend output
+├── tests/                 # Test files
 │   ├── client/            # Frontend tests
 │   ├── server/            # Backend tests
 │   └── e2e/               # End-to-end tests (Playwright)
-├── scripts/               # Utility en migratie scripts
+├── scripts/               # Utility and migration scripts
 │   ├── health-check.js    # Health check script
-│   ├── startup-check.js   # Startup verificatie
-│   └── migrations/        # Database migratie scripts
-├── config/                # Configuratie bestanden
-│   ├── vite.config.ts    # Vite configuratie
-│   ├── jest.config.js    # Jest test configuratie
+│   ├── startup-check.js   # Startup verification
+│   └── migrations/        # Database migration scripts
+├── config/                # Configuration files
+│   ├── vite.config.ts    # Vite configuration
+│   ├── jest.config.js    # Jest test configuration
 │   ├── playwright.config.ts  # Playwright E2E config
-│   └── eslint.config.js   # ESLint configuratie
-├── docs/                  # Uitgebreide documentatie
-│   ├── 01-architecture/   # Architectuur documentatie
+│   └── eslint.config.js   # ESLint configuration
+├── docs/                  # Comprehensive documentation
+│   ├── 01-architecture/   # Architecture documentation
 │   ├── 02-development/    # Development guides
-│   ├── 03-testing/        # Testing documentatie
-│   └── ...                # Aanvullende documentatie
-├── public/                # Statische assets
-├── brondocumenten.json    # Brondocumenten dataset
-└── bronwebsites.json      # Bronwebsites dataset
+│   ├── 03-testing/        # Testing documentation
+│   └── ...                # Additional documentation
+├── public/                # Static assets
+├── brondocumenten.json    # Source documents dataset
+└── bronwebsites.json      # Source websites dataset
 ```
 
-## Documentatie
+## Documentation
 
-### Aan de Slag
-- [DOCKER.md](./DOCKER.md) - **Docker gebruikersgids (crash preventie)**
-- [docs/02-development/ollama-setup.md](./docs/02-development/ollama-setup.md) - **Ollama setup gids voor LLM reranking**
-- [SETUP.md](./SETUP.md) - Gedetailleerde setup instructies
-- [CONTRIBUTING.md](./CONTRIBUTING.md) - Bijdrage richtlijnen
-- [SECURITY.md](./SECURITY.md) - Beveiligingsbeleid
+### Getting Started
+- [DOCKER.md](./DOCKER.md) - **Docker usage guide (crash prevention)**
+- [docs/02-development/ollama-setup.md](./docs/02-development/ollama-setup.md) - **Ollama setup guide for LLM reranking**
+- [SETUP.md](./SETUP.md) - Detailed setup instructions
+- [CONTRIBUTING.md](./CONTRIBUTING.md) - Contribution guidelines
+- [SECURITY.md](./SECURITY.md) - Security policies
 
-### Architectuur & Ontwerp
-- [docs/01-architecture/](./docs/01-architecture/) - Architectuur documentatie
-  - [Hybrid Retrieval Flow](./docs/01-architecture/hybrid-retrieval-flow.md) - Hybride retrieval architectuur
-  - [Vector Storage Design](./docs/01-architecture/vector-storage-design.md) - Vector storage ontwerp
-  - [Navigation Pattern Learning](./docs/ARCHITECTURE_NAVIGATION_PATTERN_LEARNING.md) - Pattern learning systeem
-- [docs/workflows/beleidsscan-wizard-steps.md](./docs/workflows/beleidsscan-wizard-steps.md) - Wizard workflow stappen
+### Architecture & Design
+- [docs/01-architecture/](./docs/01-architecture/) - Architecture documentation
+  - [Hybrid Retrieval Flow](./docs/01-architecture/hybrid-retrieval-flow.md) - Hybrid retrieval architecture
+  - [Vector Storage Design](./docs/01-architecture/vector-storage-design.md) - Vector storage design
+  - [Navigation Pattern Learning](./docs/ARCHITECTURE_NAVIGATION_PATTERN_LEARNING.md) - Pattern learning system
+- [docs/workflows/beleidsscan-wizard-steps.md](./docs/workflows/beleidsscan-wizard-steps.md) - Wizard workflow steps
 
-### API Documentatie
-- [server/README.md](./server/README.md) - Backend API documentatie
-- [docs/api/hybrid-retrieval.md](./docs/api/hybrid-retrieval.md) - Hybride retrieval API referentie
-- [swagger.yaml](./swagger.yaml) - OpenAPI specificatie
-- API docs beschikbaar op: http://localhost:4000/api-docs (wanneer server draait)
+### API Documentation
+- [server/README.md](./server/README.md) - Backend API documentation
+- [docs/api/hybrid-retrieval.md](./docs/api/hybrid-retrieval.md) - Hybrid retrieval API reference
+- [swagger.yaml](./swagger.yaml) - OpenAPI specification
+- API docs available at: http://localhost:4000/api-docs (when server is running)
 
 ### Development Guides
 - [docs/02-development/](./docs/02-development/) - Development guides
   - [Quick Start Guide](./docs/02-development/quick-start-guide.md)
   - [Adding Workflow Actions](./docs/02-development/adding-workflow-actions.md)
   - [Testing Workflow Modules](./docs/02-development/testing-workflow-modules.md)
-- [docs/03-testing/](./docs/03-testing/) - Testing documentatie
+- [docs/03-testing/](./docs/03-testing/) - Testing documentation
   - [Testing Guide](./docs/03-testing/TESTING.md)
   - [Testing Policy](./docs/04-policies/testing_policy.md)
   - [E2E Testing Policy](./docs/03-testing/E2E-TESTING-POLICY.md)
@@ -237,319 +235,319 @@ beleidsscan/
   - [Codebase Organization](./docs/04-policies/codebase-organization.md)
   - [Testing Policy](./docs/04-policies/testing_policy.md)
 
-### Feature Documentatie
-- [docs/PATTERN_LEARNING_USAGE_EXAMPLES.md](./docs/PATTERN_LEARNING_USAGE_EXAMPLES.md) - Pattern Learning gebruiksvoorbeelden
-- [docs/10-knowledge-graph/](./docs/10-knowledge-graph/) - Knowledge graph documentatie
-- [docs/12-common-crawl/](./docs/12-common-crawl/) - Common Crawl integratie
+### Feature Documentation
+- [docs/PATTERN_LEARNING_USAGE_EXAMPLES.md](./docs/PATTERN_LEARNING_USAGE_EXAMPLES.md) - Pattern Learning usage examples
+- [docs/10-knowledge-graph/](./docs/10-knowledge-graph/) - Knowledge graph documentation
+- [docs/12-common-crawl/](./docs/12-common-crawl/) - Common Crawl integration
 
-### Analyse & Onderzoek
-- [docs/07-analysis/](./docs/07-analysis/) - Codebase analyse en onderzoek
-- [docs/09-research/](./docs/09-research/) - Onderzoeksdocumenten
+### Analysis & Research
+- [docs/07-analysis/](./docs/07-analysis/) - Codebase analysis and research
+- [docs/09-research/](./docs/09-research/) - Research documents
 
-## Omgevingsvariabelen
+## Environment Variables
 
-Alle omgevingsvariabelen worden opgeslagen in een enkel `.env` bestand in de project root.
+All environment variables are stored in a single `.env` file at the project root.
 
-**Snelle Setup:**
+**Quick Setup:**
 ```bash
 cp .env.example .env
-# Bewerk .env en vul je werkelijke waarden in
+# Edit .env and fill in your actual values
 ```
 
-**Minimaal Vereiste Variabelen:**
+**Minimum Required Variables:**
 ```env
-# MongoDB verbinding (VERPLICHT)
+# MongoDB connection (REQUIRED)
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/?appName=n8n-cluster
 
-# Server configuratie
+# Server configuration
 PORT=4000
 NODE_ENV=development
 
-# Frontend configuratie
+# Frontend configuration
 VITE_API_URL=http://localhost:4000/api
 ```
 
-**Zie `.env.example` voor een volledige lijst van alle beschikbare omgevingsvariabelen** met gedetailleerde documentatie, inclusief:
+**See `.env.example` for a complete list of all available environment variables** with detailed documentation, including:
 
-- MongoDB configuratie en connection pool instellingen
-- Neo4j en GraphDB configuratie
-- Redis en PostgreSQL configuratie
+- MongoDB configuration and connection pool settings
+- Neo4j and GraphDB configuration
+- Redis and PostgreSQL configuration
 - API keys (OpenAI, Google, DSO, etc.)
-- Authenticatie & beveiliging (JWT, CSRF)
-- Embedding en hybride retrieval configuratie
-- Metadata-gebaseerde ranking configuratie
-- Pattern learning configuratie
+- Authentication & security (JWT, CSRF)
+- Embedding and hybrid retrieval configuration
+- Metadata-based ranking configuration
+- Pattern learning configuration
 - Feature flags
-- Logging en monitoring instellingen
+- Logging and monitoring settings
 
-# Email Service Configuratie (voor wachtwoord reset)
+# Email Service Configuration (for password reset)
 SMTP_HOST=smtp.gmail.com                     # SMTP server hostname
-SMTP_PORT=587                                # SMTP poort (587 voor TLS, 465 voor SSL)
-SMTP_USER=your-email@gmail.com               # SMTP gebruikersnaam/email
-SMTP_PASSWORD=your-app-password              # SMTP wachtwoord of app wachtwoord
-EMAIL_FROM=noreply@beleidsscan.nl            # Standaard afzender email adres
-EMAIL_FROM_NAME=Beleidsscan                  # Standaard afzender naam
-FRONTEND_URL=http://localhost:5173           # Frontend URL voor wachtwoord reset links
+SMTP_PORT=587                                # SMTP port (587 for TLS, 465 for SSL)
+SMTP_USER=your-email@gmail.com               # SMTP username/email
+SMTP_PASSWORD=your-app-password              # SMTP password or app password
+EMAIL_FROM=noreply@beleidsscan.nl            # Default sender email address
+EMAIL_FROM_NAME=Beleidsscan                  # Default sender name
+FRONTEND_URL=http://localhost:5173           # Frontend URL for password reset links
 
-# Hybride Retrieval Score Weights (standaard: 0.4 keyword, 0.6 semantisch)
-# Deze bepalen hoe keyword en semantische scores worden gecombineerd in document scoring
-HYBRID_KEYWORD_WEIGHT=0.4                   # Gewicht voor keyword scores
-HYBRID_SEMANTIC_WEIGHT=0.6                  # Gewicht voor semantische scores
-SEMANTIC_SIMILARITY_THRESHOLD=0.7           # Minimale gelijkenis (0-1)
+# Hybrid Retrieval Score Weights (default: 0.4 keyword, 0.6 semantic)
+# These control how keyword and semantic scores are combined in document scoring
+HYBRID_KEYWORD_WEIGHT=0.4                   # Weight for keyword scores
+HYBRID_SEMANTIC_WEIGHT=0.6                  # Weight for semantic scores
+SEMANTIC_SIMILARITY_THRESHOLD=0.7           # Minimum similarity (0-1)
 
-# Legacy scoring weights (voor backward compatibility)
+# Legacy scoring weights (for backward compatibility)
 SCORE_KEYWORD_WEIGHT=0.4
 SCORE_SEMANTIC_WEIGHT=0.6
 
-# Document Extractie & OCR Configuratie
-DOCUMENT_EXTRACTION_OCR_ENABLED=false          # Schakel OCR in voor gescande documenten
+# Document Extraction & OCR Configuration
+DOCUMENT_EXTRACTION_OCR_ENABLED=false          # Enable OCR for scanned documents
 DOCUMENT_EXTRACTION_OCR_PROVIDER=tesseract      # OCR provider: tesseract|cloud
-DOCUMENT_EXTRACTION_OCR_LANGUAGE=nld            # OCR taal (standaard: Nederlands)
-DOCUMENT_EXTRACTION_OCR_TIMEOUT=30000           # OCR timeout in milliseconden
+DOCUMENT_EXTRACTION_OCR_LANGUAGE=nld            # OCR language (default: Dutch)
+DOCUMENT_EXTRACTION_OCR_TIMEOUT=30000           # OCR timeout in milliseconds
 
-# Knowledge Graph Backend Configuratie
-# Selecteer de knowledge graph backend: 'graphdb' (standaard) of 'neo4j'
-# Let op: Hiërarchische structuur functies vereisen Neo4j backend
-KG_BACKEND=graphdb                     # graphdb|neo4j (standaard: graphdb)
-# Om hiërarchische structuur functies te gebruiken, stel in: KG_BACKEND=neo4j
+# Knowledge Graph Backend Configuration
+# Select the knowledge graph backend: 'graphdb' (default) or 'neo4j'
+# Note: Hierarchical structure features require Neo4j backend
+KG_BACKEND=graphdb                     # graphdb|neo4j (default: graphdb)
+# To use hierarchical structure features, set: KG_BACKEND=neo4j
 
-# Neo4j Configuratie (optioneel, met redelijke standaardwaarden)
-# NEO4J_URI=bolt://localhost:7687      # Neo4j verbinding URI (standaard: bolt://localhost:7687 of bolt://neo4j:7687 in Docker)
-# NEO4J_USER=neo4j                     # Neo4j gebruikersnaam (standaard: neo4j)
-# NEO4J_PASSWORD=password               # Neo4j wachtwoord (standaard: password)
-# NEO4J_MAX_CONNECTION_LIFETIME_MS=10800000  # Max verbindingslevensduur in ms (standaard: 3 uur)
-# NEO4J_MAX_POOL_SIZE=50               # Max connection pool grootte (standaard: 50)
-# NEO4J_CONNECTION_ACQUISITION_TIMEOUT_MS=120000  # Verbindingsacquisitie timeout in ms (standaard: 2 minuten)
-# NEO4J_HEALTH_CHECK_INTERVAL_MS=30000 # Health check interval in ms (standaard: 30 seconden)
+# Neo4j Configuration (optional, with sensible defaults)
+# NEO4J_URI=bolt://localhost:7687      # Neo4j connection URI (default: bolt://localhost:7687 or bolt://neo4j:7687 in Docker)
+# NEO4J_USER=neo4j                     # Neo4j username (default: neo4j)
+# NEO4J_PASSWORD=password               # Neo4j password (default: password)
+# NEO4J_MAX_CONNECTION_LIFETIME_MS=10800000  # Max connection lifetime in ms (default: 3 hours)
+# NEO4J_MAX_POOL_SIZE=50               # Max connection pool size (default: 50)
+# NEO4J_CONNECTION_ACQUISITION_TIMEOUT_MS=120000  # Connection acquisition timeout in ms (default: 2 minutes)
+# NEO4J_HEALTH_CHECK_INTERVAL_MS=30000 # Health check interval in ms (default: 30 seconds)
 
 # Knowledge Graph Feature Flags
-# Schakel knowledge graph functies in/uit voor benchmarking en A/B testing
-KG_RETRIEVAL_ENABLED=true              # Schakel KG-gebaseerde retrieval in hybride zoekopdracht in (standaard: true)
-KG_EXTRACTION_ENABLED=true             # Schakel gestructureerde extractie uit documenten in (standaard: true)
-KG_VALIDATION_ENABLED=true             # Schakel KG validatie pipeline in (standaard: true)
-KG_REASONING_ENABLED=true              # Schakel multi-hop graph redenering in (standaard: true)
-KG_HIERARCHICAL_STRUCTURE_ENABLED=true # Schakel hiërarchische structuur functies in (vereist Neo4j backend)
-# Let op: Flags kunnen ook worden beheerd via /api/feature-flags admin API tijdens runtime
-# Omgevingsvariabelen hebben voorrang boven database waarden
+# Enable/disable knowledge graph features for benchmarking and A/B testing
+KG_RETRIEVAL_ENABLED=true              # Enable KG-based retrieval in hybrid search (default: true)
+KG_EXTRACTION_ENABLED=true             # Enable structured extraction from documents (default: true)
+KG_VALIDATION_ENABLED=true             # Enable KG validation pipeline (default: true)
+KG_REASONING_ENABLED=true              # Enable multi-hop graph reasoning (default: true)
+KG_HIERARCHICAL_STRUCTURE_ENABLED=true # Enable hierarchical structure features (requires Neo4j backend)
+# Note: Flags can also be managed via /api/feature-flags admin API at runtime
+# Environment variables take precedence over database values
 
-# PDF-naar-Afbeelding Conversie Configuratie (voor OCR)
-PDF_TO_IMAGE_ENABLED=true                      # Schakel PDF-naar-afbeelding conversie in (standaard: true als OCR ingeschakeld)
-PDF_TO_IMAGE_DPI=200                           # Afbeeldingsresolutie in DPI (150, 200, 300)
-PDF_TO_IMAGE_FORMAT=png                        # Afbeeldingsformaat: png|jpeg
-PDF_TO_IMAGE_MAX_PAGES=0                       # Maximum aantal pagina's om te verwerken (0 = geen limiet)
-PDF_TO_IMAGE_QUALITY=0.95                      # JPEG kwaliteit 0-1 (alleen voor JPEG formaat)
+# PDF-to-Image Conversion Configuration (for OCR)
+PDF_TO_IMAGE_ENABLED=true                      # Enable PDF-to-image conversion (default: true if OCR enabled)
+PDF_TO_IMAGE_DPI=200                           # Image resolution in DPI (150, 200, 300)
+PDF_TO_IMAGE_FORMAT=png                        # Image format: png|jpeg
+PDF_TO_IMAGE_MAX_PAGES=0                       # Maximum pages to process (0 = no limit)
+PDF_TO_IMAGE_QUALITY=0.95                      # JPEG quality 0-1 (only for JPEG format)
 ```
 
-## Functies
+## Features
 
-### Kernfunctionaliteit
+### Core Functionality
 
-- ✅ **Multi-step Wizard Workflow**: 8-stap backend workflow voor uitgebreide documentontdekking
-  - Stap 1: DSO Omgevingsdocumenten ontdekking
-  - Stap 2: DSO document verrijking (optioneel)
-  - Stap 3: IPLO document zoeken
-  - Stap 4: Bekende bron scanning
-  - Stap 5: Samenvoegen, scoren en categoriseren
-  - Stap 6: Officiële publicaties zoeken (Officiele Bekendmakingen)
-  - Stap 7: Jurisprudentie zoeken (Rechtspraak)
-  - Stap 8: Common Crawl diepe ontdekking (optioneel)
+- ✅ **Multi-step Wizard Workflow**: 8-step backend workflow for comprehensive document discovery
+  - Step 1: DSO Omgevingsdocumenten discovery
+  - Step 2: DSO document enrichment (optional)
+  - Step 3: IPLO document search
+  - Step 4: Known source scanning
+  - Step 5: Merge, score, and categorize
+  - Step 6: Official publications search (Officiele Bekendmakingen)
+  - Step 7: Jurisprudence search (Rechtspraak)
+  - Step 8: Common Crawl deep discovery (optional)
 
-- ✅ **Frontend Wizard UI**: 3-stap gebruikersinterface voor query configuratie, website selectie en document review
-- ✅ **Overheidsniveau Selectie**: Filter op gemeente, waterschap, provincie, rijksoverheid
-- ✅ **Onderwerp en Thema Filtering**: Geavanceerde filtering op onderwerp en thema
-- ✅ **Document Review Workflow**: Documenten goedkeuren/afwijzen met aangepaste toevoegingen
-- ✅ **MongoDB Persistence**: Alle data opgeslagen in MongoDB met uitgebreide models
+- ✅ **Frontend Wizard UI**: 3-step user interface for query configuration, website selection, and document review
+- ✅ **Government Level Selection**: Filter by gemeente, waterschap, provincie, rijksoverheid
+- ✅ **Subject and Theme Filtering**: Advanced filtering by subject (onderwerp) and theme (thema)
+- ✅ **Document Review Workflow**: Approve/reject documents with custom additions
+- ✅ **MongoDB Persistence**: All data stored in MongoDB with comprehensive models
 
-### Zoeken & Retrieval
+### Search & Retrieval
 
-- ✅ **Hybride Retrieval**: Combineert keyword en semantisch zoeken voor verbeterde documentontdekking
-- ✅ **Vector Embeddings**: Semantisch zoeken met document embeddings (Xenova/all-MiniLM-L6-v2)
-- ✅ **Metadata-gebaseerde Ranking**: Verbeterde ranking met document metadata (type, thema's, autoriteit, datums)
-- ✅ **Knowledge Graph Integratie**: GraphDB/Neo4j ondersteuning voor relatiemapping en multi-hop redenering
-- ✅ **Navigation Graph**: Geautomatiseerde ontdekking van beleidsdocument relaties
+- ✅ **Hybrid Retrieval**: Combines keyword and semantic search for improved document discovery
+- ✅ **Vector Embeddings**: Semantic search using document embeddings (Xenova/all-MiniLM-L6-v2)
+- ✅ **Metadata-Based Ranking**: Enhanced ranking using document metadata (type, themes, authority, dates)
+- ✅ **Knowledge Graph Integration**: GraphDB/Neo4j support for relationship mapping and multi-hop reasoning
+- ✅ **Navigation Graph**: Automated discovery of policy document relationships
 
-### Databronnen
+### Data Sources
 
-- ✅ **DSO (Omgevingswet)**: Integratie met Omgevingsinformatie Ontsluiten v2 API
-- ✅ **IPLO**: Zoek IPLO beleidsdocumenten
-- ✅ **Officiele Bekendmakingen**: Officiële overheidspublicaties (SRU API)
-- ✅ **Rechtspraak**: Jurisprudentie database zoeken
-- ✅ **Common Crawl**: Optionele diepe web ontdekking
-- ✅ **Web Scraping**: Geautomatiseerd scraping van overheidswebsites
+- ✅ **DSO (Omgevingswet)**: Integration with Omgevingsinformatie Ontsluiten v2 API
+- ✅ **IPLO**: Search IPLO policy documents
+- ✅ **Officiele Bekendmakingen**: Official government publications (SRU API)
+- ✅ **Rechtspraak**: Jurisprudence database search
+- ✅ **Common Crawl**: Optional deep web discovery
+- ✅ **Web Scraping**: Automated scraping from government websites
 
-### Technische Functies
+### Technical Features
 
-- ✅ **RESTful API**: TypeScript-gebaseerde Express API met OpenAPI documentatie
-- ✅ **Real-time Health Monitoring**: Health check endpoints en monitoring
-- ✅ **Server-Sent Events (SSE)**: Real-time workflow log streaming met automatische herverbinding
-- ✅ **Workflow Engine**: Configureerbaar workflow systeem met action-based architectuur
-- ✅ **Achtergrond Job Processing**: Redis/Bull queue voor async operaties
-- ✅ **Document Export**: Meerdere export formaten (CSV, PDF, JSON, Markdown, TSV, HTML, XML, XLSX)
-- ✅ **OCR Ondersteuning**: Tesseract.js integratie voor gescande documentverwerking
-- ✅ **Admin Dashboard**: Workflow beheer, analytics en error monitoring
+- ✅ **RESTful API**: TypeScript-based Express API with OpenAPI documentation
+- ✅ **Real-time Health Monitoring**: Health check endpoints and monitoring
+- ✅ **Server-Sent Events (SSE)**: Real-time workflow log streaming with automatic reconnection
+- ✅ **Workflow Engine**: Configurable workflow system with action-based architecture
+- ✅ **Background Job Processing**: Redis/Bull queue for async operations
+- ✅ **Document Export**: Multiple export formats (CSV, PDF, JSON, Markdown, TSV, HTML, XML, XLSX)
+- ✅ **OCR Support**: Tesseract.js integration for scanned document processing
+- ✅ **Admin Dashboard**: Workflow management, analytics, and error monitoring
 
 ## Tech Stack
 
 ### Frontend
-- **React 19** + **TypeScript** - Modern React met nieuwste functies
-- **Vite** - Snelle build tool en dev server
+- **React 19** + **TypeScript** - Modern React with latest features
+- **Vite** - Fast build tool and dev server
 - **Tailwind CSS 4** - Utility-first CSS framework
-- **Radix UI** - Toegankelijke component primitieven
-- **Lucide React** - Icon bibliotheek
+- **Radix UI** - Accessible component primitives
+- **Lucide React** - Icon library
 - **React Router** - Client-side routing
-- **React Hook Form** - Form beheer
-- **Zod** - Schema validatie
+- **React Hook Form** - Form management
+- **Zod** - Schema validation
 
 ### Backend
 - **Express** + **TypeScript** - Web framework
-- **MongoDB** - Document database (Atlas of lokaal)
-- **Neo4j** - Graph database (optioneel, voor hiërarchische functies)
-- **GraphDB** - RDF knowledge graph (standaard)
-- **Redis** - Caching en job queue (Bull)
-- **tsx** - TypeScript uitvoering zonder compilatie
+- **MongoDB** - Document database (Atlas or local)
+- **Neo4j** - Graph database (optional, for hierarchical features)
+- **GraphDB** - RDF knowledge graph (default)
+- **Redis** - Caching and job queue (Bull)
+- **tsx** - TypeScript execution without compilation
 - **@xenova/transformers** - Vector embeddings (all-MiniLM-L6-v2)
-- **Tesseract.js** - OCR voor gescande documenten
-- **Socket.io** - Real-time bidirectionele communicatie (metrics, progress)
+- **Tesseract.js** - OCR for scanned documents
+- **Socket.io** - Real-time bidirectional communication (metrics, progress)
 - **Server-Sent Events (SSE)** - Real-time log streaming (workflow logs)
 
-### Testing & Kwaliteit
-- **Jest** - Unit en integration testing
+### Testing & Quality
+- **Jest** - Unit and integration testing
 - **Playwright** - End-to-end browser testing
 - **ESLint** - Code linting
 - **TypeScript** - Type safety
 - **Stryker** - Mutation testing
 
 ### Development Tools
-- **Concurrently** - Voer meerdere services uit
+- **Concurrently** - Run multiple services
 - **wait-on** - Service readiness checks
 - **Husky** - Git hooks
-- **Commitlint** - Commit bericht validatie
-- **Nx** - Monorepo tooling (optioneel)
+- **Commitlint** - Commit message validation
+- **Nx** - Monorepo tooling (optional)
 
 ## Testing
 
-Het project bevat uitgebreide testinfrastructuur met **200+ test bestanden** over meerdere lagen:
+The project includes comprehensive testing infrastructure with **200+ test files** across multiple layers:
 
 ### Test Types
 
-- **Unit Tests**: Snelle, geïsoleerde component en functie tests (Jest)
-- **Integration Tests**: API en service integration tests (Jest + Supertest)
-- **E2E Tests**: Volledige browser tests met Playwright (100+ tests)
-- **Component Tests**: React component tests met Testing Library
-- **Contract Tests**: API contract validatie
+- **Unit Tests**: Fast, isolated component and function tests (Jest)
+- **Integration Tests**: API and service integration tests (Jest + Supertest)
+- **E2E Tests**: Full browser tests with Playwright (100+ tests)
+- **Component Tests**: React component tests with Testing Library
+- **Contract Tests**: API contract validation
 
-### Tests Uitvoeren
+### Running Tests
 
 ```bash
-# Voer alle tests uit (⚠️ kan PC crashen, gebruik Docker in plaats daarvan)
+# Run all tests (⚠️ can crash PC, use Docker instead)
 pnpm test
 
-# Voer specifieke test suites uit
-pnpm run test:unit              # Alleen unit tests
-pnpm run test:integration      # Alleen integration tests
+# Run specific test suites
+pnpm run test:unit              # Unit tests only
+pnpm run test:integration      # Integration tests only
 pnpm run test:e2e              # E2E tests
 pnpm run test:component        # Component tests
 
-# Voer tests uit in Docker (aanbevolen)
+# Run tests in Docker (recommended)
 docker compose run --rm test pnpm test
 
-# Genereer coverage rapport
+# Generate coverage report
 pnpm run coverage
 ```
 
 ### Test Dashboard
 
-Toegang tot het test dashboard voor visuele analytics:
-- **Via Server**: http://localhost:4000/test-dashboard (wanneer server draait)
-- **Statisch Bestand**: Open `public/test-dashboard.html` in browser
+Access the test dashboard for visual analytics:
+- **Via Server**: http://localhost:4000/test-dashboard (when server is running)
+- **Static File**: Open `public/test-dashboard.html` in browser
 
-📚 **Zie [Testing Guide](./docs/03-testing/TESTING.md) voor uitgebreide testing documentatie**
+📚 **See [Testing Guide](./docs/03-testing/TESTING.md) for comprehensive testing documentation**
 
-## Probleemoplossing
+## Troubleshooting
 
-### Services starten niet
-Voer de startup check uit om problemen te identificeren:
+### Services won't start
+Run the startup check to identify issues:
 ```bash
 pnpm run startup-check
 ```
 
-### Health check faalt
-Verifieer dat services draaien:
+### Health check fails
+Verify services are running:
 ```bash
 pnpm run health-check
 ```
 
-### MongoDB verbindingsfouten
-1. Controleer je MongoDB URI in `.env`
-2. Verifieer je database wachtwoord
-3. Zorg dat je IP is whitelisted in MongoDB Atlas
-4. Controleer MongoDB connection string formaat
+### MongoDB connection errors
+1. Check your MongoDB URI in `.env`
+2. Verify your database password
+3. Ensure your IP is whitelisted in MongoDB Atlas
+4. Check MongoDB connection string format
 
-### Docker problemen
-1. Verifieer dat Docker draait: `docker ps`
-2. Controleer container logs: `docker compose logs app`
-3. Valideer Docker config: `pnpm run validate:docker`
-4. Zie [DOCKER.md](./DOCKER.md) voor gedetailleerde probleemoplossing
+### Docker issues
+1. Verify Docker is running: `docker ps`
+2. Check container logs: `docker compose logs app`
+3. Validate Docker config: `pnpm run validate:docker`
+4. See [DOCKER.md](./DOCKER.md) for detailed troubleshooting
 
-### Tests crashen of hangen
-- **Gebruik Docker**: Voer tests uit in geïsoleerde containers om resource problemen te voorkomen
-- **Controleer geheugen**: Tests kunnen aanzienlijk geheugen vereisen
-- **Bekijk test logs**: Controleer op specifieke test fouten
-- **Voer specifieke suites uit**: Gebruik `test:unit` of `test:integration` in plaats van alle tests
+### Tests crashing or hanging
+- **Use Docker**: Run tests in isolated containers to prevent resource issues
+- **Check memory**: Tests may require significant memory
+- **Review test logs**: Check for specific test failures
+- **Run specific suites**: Use `test:unit` or `test:integration` instead of all tests
 
-### Hybride Retrieval
+### Hybrid Retrieval
 
-**Schakel Hybride Retrieval in:**
-1. Stel `HYBRID_RETRIEVAL_ENABLED=true` in `.env` in
-2. Stel `EMBEDDING_ENABLED=true` in om embeddings te genereren
-3. Herstart de backend server
+**Enable Hybrid Retrieval:**
+1. Set `HYBRID_RETRIEVAL_ENABLED=true` in `.env`
+2. Set `EMBEDDING_ENABLED=true` to generate embeddings
+3. Restart the backend server
 
-**Genereer Embeddings voor Bestaande Documenten:**
+**Generate Embeddings for Existing Documents:**
 ```bash
-# Voer migratie script uit om embeddings te genereren voor bestaande documenten
+# Run migration script to generate embeddings for existing documents
 pnpm run migrate-embeddings
 ```
 
-**Controleer Embedding Status:**
+**Check Embedding Status:**
 ```bash
-# Verbind met MongoDB en controleer
+# Connect to MongoDB and check
 mongosh "your-connection-string"
 use beleidsscan
 db.brondocumenten.countDocuments({ embedding: { $exists: true } })
 ```
 
-**Documentatie:**
-- Zie [Hybrid Retrieval Flow](./docs/01-architecture/hybrid-retrieval-flow.md) voor architectuur details
-- Zie [API Documentatie](./docs/api/hybrid-retrieval.md) voor API gebruik
-- Zie [Vector Storage Design](./docs/01-architecture/vector-storage-design.md) voor storage details
+**Documentation:**
+- See [Hybrid Retrieval Flow](./docs/01-architecture/hybrid-retrieval-flow.md) for architecture details
+- See [API Documentation](./docs/api/hybrid-retrieval.md) for API usage
+- See [Vector Storage Design](./docs/01-architecture/vector-storage-design.md) for storage details
 
-### Knowledge Graph Problemen
+### Knowledge Graph Issues
 
-**GraphDB Verbinding:**
-- Verifieer dat GraphDB draait (als je GraphDB backend gebruikt)
-- Controleer `KG_BACKEND` instelling in `.env`
+**GraphDB Connection:**
+- Verify GraphDB is running (if using GraphDB backend)
+- Check `KG_BACKEND` setting in `.env`
 
-**Neo4j Verbinding:**
-- Zorg dat Neo4j draait en toegankelijk is
-- Stel `KG_BACKEND=neo4j` in `.env` in
-- Verifieer Neo4j verbindingscredentials
+**Neo4j Connection:**
+- Ensure Neo4j is running and accessible
+- Set `KG_BACKEND=neo4j` in `.env`
+- Verify Neo4j connection credentials
 
-### Workflow Problemen
+### Workflow Issues
 
-**Workflow voert niet uit:**
-- Controleer Redis verbinding (vereist voor workflow queue)
-- Verifieer workflow definities in `src/server/workflows/`
-- Controleer workflow logs via admin dashboard
+**Workflow not executing:**
+- Check Redis connection (required for workflow queue)
+- Verify workflow definitions in `src/server/workflows/`
+- Check workflow logs via admin dashboard
 
-**Workflow fouten:**
-- Bekijk error logs in admin dashboard
-- Controleer workflow action implementaties
-- Verifieer externe API verbindingen (DSO, IPLO, etc.)
+**Workflow errors:**
+- Review error logs in admin dashboard
+- Check workflow action implementations
+- Verify external API connections (DSO, IPLO, etc.)
 
-## Licentie
+## License
 
-Privaat - Ruimtemeesters
+Private - Ruimtemeesters
 
-## Ondersteuning
+## Support
 
-Voor problemen en vragen, neem contact op met ralph@ruimtemeesters.nl
+For issues and questions, contact ralph@ruimtemeesters.nl
