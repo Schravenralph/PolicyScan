@@ -280,7 +280,7 @@ VITE_API_URL=http://localhost:4000/api
 - Feature flags
 - Logging and monitoring settings
 
-# Email Service Configuration (for password reset)
+### Email Service Configuration (for password reset)
 SMTP_HOST=smtp.gmail.com                     # SMTP server hostname
 SMTP_PORT=587                                # SMTP port (587 for TLS, 465 for SSL)
 SMTP_USER=your-email@gmail.com               # SMTP username/email
@@ -289,54 +289,54 @@ EMAIL_FROM=noreply@beleidsscan.nl            # Default sender email address
 EMAIL_FROM_NAME=Beleidsscan                  # Default sender name
 FRONTEND_URL=http://localhost:5173           # Frontend URL for password reset links
 
-# Hybrid Retrieval Score Weights (default: 0.4 keyword, 0.6 semantic)
-# These control how keyword and semantic scores are combined in document scoring
+### Hybrid Retrieval Score Weights (default: 0.4 keyword, 0.6 semantic)
+**These control how keyword and semantic scores are combined in document scoring**
 HYBRID_KEYWORD_WEIGHT=0.4                   # Weight for keyword scores
 HYBRID_SEMANTIC_WEIGHT=0.6                  # Weight for semantic scores
 SEMANTIC_SIMILARITY_THRESHOLD=0.7           # Minimum similarity (0-1)
 
-# Legacy scoring weights (for backward compatibility)
+### Legacy scoring weights (for backward compatibility)
 SCORE_KEYWORD_WEIGHT=0.4
 SCORE_SEMANTIC_WEIGHT=0.6
 
-# Document Extraction & OCR Configuration
+### Document Extraction & OCR Configuration
 DOCUMENT_EXTRACTION_OCR_ENABLED=false          # Enable OCR for scanned documents
 DOCUMENT_EXTRACTION_OCR_PROVIDER=tesseract      # OCR provider: tesseract|cloud
 DOCUMENT_EXTRACTION_OCR_LANGUAGE=nld            # OCR language (default: Dutch)
 DOCUMENT_EXTRACTION_OCR_TIMEOUT=30000           # OCR timeout in milliseconds
 
-# Knowledge Graph Backend Configuration
-# Select the knowledge graph backend: 'graphdb' (default) or 'neo4j'
-# Note: Hierarchical structure features require Neo4j backend
+### Knowledge Graph Backend Configuration
+**Select the knowledge graph backend: 'graphdb' (default) or 'neo4j'**
+Note: Hierarchical structure features require Neo4j backend
 KG_BACKEND=graphdb                     # graphdb|neo4j (default: graphdb)
-# To use hierarchical structure features, set: KG_BACKEND=neo4j
+To use hierarchical structure features, set: KG_BACKEND=neo4j
 
-# Neo4j Configuration (optional, with sensible defaults)
-# NEO4J_URI=bolt://localhost:7687      # Neo4j connection URI (default: bolt://localhost:7687 or bolt://neo4j:7687 in Docker)
-# NEO4J_USER=neo4j                     # Neo4j username (default: neo4j)
-# NEO4J_PASSWORD=password               # Neo4j password (default: password)
-# NEO4J_MAX_CONNECTION_LIFETIME_MS=10800000  # Max connection lifetime in ms (default: 3 hours)
-# NEO4J_MAX_POOL_SIZE=50               # Max connection pool size (default: 50)
-# NEO4J_CONNECTION_ACQUISITION_TIMEOUT_MS=120000  # Connection acquisition timeout in ms (default: 2 minutes)
-# NEO4J_HEALTH_CHECK_INTERVAL_MS=30000 # Health check interval in ms (default: 30 seconds)
+### Neo4j Configuration (optional, with sensible defaults)
+NEO4J_URI=bolt://localhost:7687      # Neo4j connection URI (default: bolt://localhost:7687 or bolt://neo4j:7687 in Docker)
+NEO4J_USER=neo4j                     # Neo4j username (default: neo4j)
+NEO4J_PASSWORD=password               # Neo4j password (default: password)
+NEO4J_MAX_CONNECTION_LIFETIME_MS=10800000  # Max connection lifetime in ms (default: 3 hours)
+NEO4J_MAX_POOL_SIZE=50               # Max connection pool size (default: 50)
+NEO4J_CONNECTION_ACQUISITION_TIMEOUT_MS=120000  # Connection acquisition timeout in ms (default: 2 minutes)
+NEO4J_HEALTH_CHECK_INTERVAL_MS=30000 # Health check interval in ms (default: 30 seconds)
 
-# Knowledge Graph Feature Flags
-# Enable/disable knowledge graph features for benchmarking and A/B testing
+### Knowledge Graph Feature Flags
+**Enable/disable knowledge graph features for benchmarking and A/B testing**
 KG_RETRIEVAL_ENABLED=true              # Enable KG-based retrieval in hybrid search (default: true)
 KG_EXTRACTION_ENABLED=true             # Enable structured extraction from documents (default: true)
 KG_VALIDATION_ENABLED=true             # Enable KG validation pipeline (default: true)
 KG_REASONING_ENABLED=true              # Enable multi-hop graph reasoning (default: true)
 KG_HIERARCHICAL_STRUCTURE_ENABLED=true # Enable hierarchical structure features (requires Neo4j backend)
-# Note: Flags can also be managed via /api/feature-flags admin API at runtime
-# Environment variables take precedence over database values
+**Note: Flags can also be managed via /api/feature-flags admin API at runtime**
+**Environment variables take precedence over database values**
 
-# PDF-to-Image Conversion Configuration (for OCR)
+#$$ PDF-to-Image Conversion Configuration (for OCR)
 PDF_TO_IMAGE_ENABLED=true                      # Enable PDF-to-image conversion (default: true if OCR enabled)
 PDF_TO_IMAGE_DPI=200                           # Image resolution in DPI (150, 200, 300)
 PDF_TO_IMAGE_FORMAT=png                        # Image format: png|jpeg
 PDF_TO_IMAGE_MAX_PAGES=0                       # Maximum pages to process (0 = no limit)
 PDF_TO_IMAGE_QUALITY=0.95                      # JPEG quality 0-1 (only for JPEG format)
-```
+
 
 ## Features
 
